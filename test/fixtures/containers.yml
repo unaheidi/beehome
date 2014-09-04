@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  container_id: MyString
+  image_id: 1
+  ip_address_id: 1
+  status: 1
+
+two:
+  container_id: MyString
+  image_id: 1
+  ip_address_id: 1
+  status: 1

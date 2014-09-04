@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  repository: MyString
+  tag: MyString
+  image_id: MyString
+  dockerfile_url: MyString
+  type: 1
+  status: 1
+
+two:
+  repository: MyString
+  tag: MyString
+  image_id: MyString
+  dockerfile_url: MyString
+  type: 1
+  status: 1

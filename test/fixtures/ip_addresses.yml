@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  address: MyString
+  netmask: MyString
+  device_id: 1
+  status: 1
+
+two:
+  address: MyString
+  netmask: MyString
+  device_id: 1
+  status: 1

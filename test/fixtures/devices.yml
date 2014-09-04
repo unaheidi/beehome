@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ip: MyString
+  os: MyString
+  docker_remote_api: MyString
+  status: 1
+
+two:
+  ip: MyString
+  os: MyString
+  docker_remote_api: MyString
+  status: 1
