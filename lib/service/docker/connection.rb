@@ -10,25 +10,21 @@ module Service::Docker
       @timeout = options[:timeout] || 30
     end
 
-    def post(path, params = {}, param_style = "form")
+    def post(path, options = {}, style = "form")
       begin
-        response = Timeout::timeout(@timeout) do
-          headers = {
-            'Content-Type' => 'application/json'
-          }
-          options = (param_style == "form") ? { :body => params, headers: headers } : { :query => params }
-          self.class.post(path, options)
-        end
+        #Timeout::timeout(@timeout) do
+          params = (style == "form") ? { :body => options } : { :query => options }
+          self.class.post(path, params)
+        #end
       rescue => ex
         raise DockerConnectionError.new(ex)
       end
-      response
     end
 
-    def get(path, params = {})
+    def get(path, options = {})
       begin
         Timeout::timeout(@timeout) do
-          self.class.get(path, query: params)
+          self.class.get(path, query: options)
         end
       rescue => ex
         raise DockerConnectionError.new(ex)
