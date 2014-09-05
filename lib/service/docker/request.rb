@@ -19,6 +19,7 @@ module Service::Docker
     end
 
     def create_container(options = {})
+      debugger
       params = {
         'Ip' => options[:ip] || options['ip'] , # '192.168.218.253/24@192.168.218.1'
         'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
@@ -31,11 +32,13 @@ module Service::Docker
     end
 
     def start_container(options = {})
+      debugger
       params = {
         "PublishAllPorts" => true,
       }
+      container = options[:container] || options['container']
       begin
-        @conn.post("/containers/#{options[:container]}/start", params.to_json, "form").body
+        @conn.post("/containers/#{container}/start", params.to_json, "form").body
       rescue DockerStartContainerError => ex
         raise DockerStartContainerError.new(ex)
       end

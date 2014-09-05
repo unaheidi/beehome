@@ -5,7 +5,7 @@ class CreateImages < ActiveRecord::Migration
       t.string :tag
       t.string :image_id
       t.string :dockerfile_url
-      t.integer :type
+      t.integer :purpose
       t.integer :status
 
       t.timestamps

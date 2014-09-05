@@ -13,7 +13,10 @@ module Service::Docker
     def post(path, options = {}, style = "form")
       begin
         #Timeout::timeout(@timeout) do
-          params = (style == "form") ? { :body => options } : { :query => options }
+          headers = {
+            'Content-Type' => 'application/json'
+          }
+          params = (style == "form") ? { :body => options, headers: headers} : { :query => options }
           self.class.post(path, params)
         #end
       rescue => ex
