@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'https://ruby.taobao.org'
 
 gem 'rails', '3.2.13'
 
@@ -10,6 +10,14 @@ gem 'sqlite3'
 # Supported DBs
 gem "mysql2", group: :mysql
 
+gem 'thin', "~> 1.6.1"
+
+# grape api
+gem "grape", "~> 0.4.1"
+gem "grape-entity", "~> 0.3.0"
+
+# state machine
+gem "state_machine", "1.2.0"
 
 # Gems used only for assets and not required
 # in production environments by default.

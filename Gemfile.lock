@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://ruby.taobao.org/
   specs:
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
@@ -29,7 +29,12 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     arel (3.0.3)
+    axiom-types (0.0.5)
+      descendants_tracker (~> 0.0.1)
+      ice_nine (~> 0.9)
     builder (3.0.4)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -38,19 +43,38 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     columnize (0.8.9)
+    daemons (1.1.9)
     debugger (1.6.8)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
       debugger-ruby_core_source (~> 1.3.5)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.3.5)
+    descendants_tracker (0.0.3)
+    equalizer (0.0.9)
     erubis (2.7.0)
+    eventmachine (1.0.3)
     execjs (2.2.1)
+    grape (0.4.1)
+      activesupport
+      builder
+      hashie (>= 1.2.0)
+      multi_json (>= 1.3.2)
+      multi_xml (>= 0.5.2)
+      rack (>= 1.3.0)
+      rack-accept
+      rack-mount
+      virtus
+    grape-entity (0.3.0)
+      activesupport
+      multi_json (>= 1.3.2)
+    hashie (2.0.5)
     hike (1.2.3)
     httparty (0.13.1)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.6.1)
+    ice_nine (0.11.0)
     journey (1.0.4)
     jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
@@ -65,8 +89,12 @@ GEM
     mysql2 (0.3.16)
     polyglot (0.3.5)
     rack (1.4.5)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
     rack-cache (1.2)
       rack (>= 0.4)
+    rack-mount (0.8.3)
+      rack (>= 1.0.0)
     rack-ssl (1.3.4)
       rack
     rack-test (0.6.2)
@@ -100,6 +128,11 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.9)
+    state_machine (1.2.0)
+    thin (1.6.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 1.0.0)
+      rack (>= 1.0.0)
     thor (0.19.1)
     tilt (1.4.1)
     treetop (1.4.15)
@@ -109,6 +142,11 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    virtus (1.0.1)
+      axiom-types (~> 0.0.5)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0.1)
+      equalizer (~> 0.0.7)
 
 PLATFORMS
   ruby
@@ -116,10 +154,14 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   debugger
+  grape (~> 0.4.1)
+  grape-entity (~> 0.3.0)
   httparty
   jquery-rails
   mysql2
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
   sqlite3
+  state_machine (= 1.2.0)
+  thin (~> 1.6.1)
   uglifier (>= 1.0.3)

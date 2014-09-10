@@ -1,3 +1,5 @@
+require 'api/api'
+
 Beehome::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -12,6 +14,9 @@ Beehome::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+
+  mount API::API => '/api'
+
 
   # Sample resource route with options:
   #   resources :products do

@@ -37,6 +37,10 @@ ActiveRecord::Schema.define(:version => 20140910035617) do
     t.string   "tag"
     t.string   "image_id"
     t.string   "dockerfile_url"
+<<<<<<< HEAD
+=======
+    t.integer  "purpose"
+>>>>>>> b7026b88284fb57cf0d625c41713b47857705e63
     t.integer  "status"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
