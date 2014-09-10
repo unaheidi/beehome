@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140901094400) do
+ActiveRecord::Schema.define(:version => 20140910035617) do
 
   create_table "containers", :force => true do |t|
     t.string   "container_id"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20140901094400) do
 
   create_table "devices", :force => true do |t|
     t.string   "ip"
+    t.string   "gateway"
     t.string   "os"
     t.string   "docker_remote_api"
     t.integer  "status"
@@ -36,10 +37,10 @@ ActiveRecord::Schema.define(:version => 20140901094400) do
     t.string   "tag"
     t.string   "image_id"
     t.string   "dockerfile_url"
-    t.integer  "type"
     t.integer  "status"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "purpose"
   end
 
   create_table "ip_addresses", :force => true do |t|

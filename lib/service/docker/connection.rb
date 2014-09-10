@@ -5,8 +5,8 @@ module Service::Docker
     include HTTParty
 
     def initialize(options = {})
-      remote_api_url = options[:remote_api_url]
-      self.class.base_uri(remote_api_url)
+      docker_remote_api = options[:docker_remote_api]
+      self.class.base_uri(docker_remote_api)
       @timeout = options[:timeout] || 30
     end
 

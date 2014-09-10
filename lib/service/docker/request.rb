@@ -5,9 +5,10 @@ module Service::Docker
 
   class Request
     attr_reader :conn
-    def initialize(options = {remote_api_url: "http://"})
-      remote_api_url = options[:remote_api_url] || options['remote_api_url']
-      @conn = Connection.new(remote_api_url: remote_api_url) # remote_api_url: "http://192.168.218.15:8090"
+
+    def initialize(options = {docker_remote_api: "http://"})
+      docker_remote_api = options[:docker_remote_api] || options['docker_remote_api']
+      @conn = Connection.new(docker_remote_api: docker_remote_api) # docker_remote_api: "http://192.168.218.15:8090"
     end
 
     def create_image(options = {fromImage: 'docker.diors.it/alpha_machine', tag: 'v1.0'})
@@ -19,7 +20,6 @@ module Service::Docker
     end
 
     def create_container(options = {})
-      debugger
       params = {
         'Ip' => options[:ip] || options['ip'] , # '192.168.218.253/24@192.168.218.1'
         'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
@@ -32,7 +32,6 @@ module Service::Docker
     end
 
     def start_container(options = {})
-      debugger
       params = {
         "PublishAllPorts" => true,
       }
