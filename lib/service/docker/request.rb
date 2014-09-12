@@ -2,6 +2,7 @@ module Service::Docker
   class DockerCreateImageError < StandardError; end
   class DockerCreateContainerError < StandardError; end
   class DockerStartContainerError < StandardError; end
+  class DockerDeleteContainerError < StandardError; end
 
   class Request
     attr_reader :conn
@@ -40,6 +41,18 @@ module Service::Docker
         @conn.post("/containers/#{container}/start", params.to_json, "form").body
       rescue DockerStartContainerError => ex
         raise DockerStartContainerError.new(ex)
+      end
+    end
+
+    def delete_container(options = {})
+      params = {
+        "force" => true,
+      }
+      container = options[:container] || options['container']
+      begin
+        @conn.delete("/containers/#{container}", params).body
+      rescue DockerDeleteContainerError => ex
+        raise DockerDeleteContainerError.new(ex)
       end
     end
 

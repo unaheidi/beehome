@@ -50,3 +50,6 @@ gem 'debugger'
 
 # HTTP requests
 gem "httparty"
+
+# Background jobs
+gem 'sidekiq'

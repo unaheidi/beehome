@@ -8,22 +8,32 @@ module API
       end
 
       get "apply" do
-      	debugger
       	containers_number = params["number"].to_i
       	purpose = params["purpose"]
       	image_ids = Image.where(purpose: purpose, status: Image::STATUS_LIST['recommended']).pluck(:id)
       	containers = Container.where(status: Container::STATUS_LIST['available']).where(image_id: image_ids).limit(containers_number)
-        return {result: "Failed.No free container or no image for the purpose."} if containers.blank?
+        return {result: 0, message: "Failed.No free container or no image for the purpose."} if containers.blank?
         ip_addresses = []
         containers.each do |container|
         	container.update_attributes(status: Container::STATUS_LIST['used'])
         	ip_addresses.push(container.ip_address.address)
         end
         if containers.size < containers_number
-        	return {result: "Less than the request numer.", ip_addresses: ip_addresses}
+        	return {result: 1, message: "Less than the request numer.", purpose: purpose, ip_addresses: ip_addresses}
         else
-        	return {result: "Successfully.", ip_addresses: ip_addresses}
+        	return {result: 2, message: "Successfully.", purpose: purpose, ip_addresses: ip_addresses}
         end
+      end
+
+      post "rebuild" do
+        container_ip = params["ip"]
+        ip_address = IpAddress.where(address: container_ip).first
+        return {result: 0, message: "Failed.No such ip record in ip_addresses table."} if ip_address.blank?
+        ip_address_id = IpAddress.where(address: container_ip).first.id
+        to_be_deleted_container = Container.where(ip_address_id: ip_address_id).where(status: Container::STATUS_LIST['used']).first
+        return {result: 0, message: "Failed.No container with the specified ip in containers table."} if to_be_deleted_container.blank?
+        RebuildContainerWorker.perform_async(to_be_deleted_container.container_id)
+        return {result: 1, message: "Beehome is going to rebuild the container with ip #{container_ip} !"}
       end
 
     end

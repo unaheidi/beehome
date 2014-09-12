@@ -33,6 +33,8 @@ GEM
       descendants_tracker (~> 0.0.1)
       ice_nine (~> 0.9)
     builder (3.0.4)
+    celluloid (0.15.2)
+      timers (~> 1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     coffee-rails (3.2.2)
@@ -43,6 +45,7 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     columnize (0.8.9)
+    connection_pool (2.0.0)
     daemons (1.1.9)
     debugger (1.6.8)
       columnize (>= 0.3.1)
@@ -117,11 +120,20 @@ GEM
     rake (10.3.2)
     rdoc (3.12.2)
       json (~> 1.4)
+    redis (3.0.7)
+    redis-namespace (1.4.1)
+      redis (~> 3.0.4)
     sass (3.4.2)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    sidekiq (3.1.2)
+      celluloid (>= 0.15.2)
+      connection_pool (>= 2.0.0)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -135,6 +147,7 @@ GEM
       rack (>= 1.0.0)
     thor (0.19.1)
     tilt (1.4.1)
+    timers (1.1.0)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -161,6 +174,7 @@ DEPENDENCIES
   mysql2
   rails (= 3.2.13)
   sass-rails (~> 3.2.3)
+  sidekiq
   sqlite3
   state_machine (= 1.2.0)
   thin (~> 1.6.1)
