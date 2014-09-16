@@ -45,11 +45,14 @@ gem 'jquery-rails'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger
-gem 'debugger'
-
 # HTTP requests
 gem "httparty"
 
 # Background jobs
 gem 'sidekiq'
+
+group :development, :test do
+	gem "rspec-rails", '~> 3.0.0'
+	gem 'factory_girl_rails'
+	gem 'debugger'
+end

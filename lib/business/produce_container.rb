@@ -1,11 +1,13 @@
 module Business
 	class ProduceContainer
-    attr_reader :options
+    attr_reader :options, :available_device, :recommended_image
     def initialize(options = {purpose: 'alpha'})
       @options = options
     end
 
     def execute
+      @available_device = Device.available_device
+      @recommended_image = Image.recommended_image(options[:purpose])
       return "[warning] No available device." unless available_device
       return "[warning] No recommended image." unless recommended_image
 
@@ -22,24 +24,6 @@ module Business
       rescue => e
         "[error] #{e}.#{result}."
       end
-    end
-
-    def available_device
-      @available_device ||=
-        begin
-          Device.where(status: Device::STATUS_LIST['available']).first
-        rescue
-          nil
-        end
-    end
-
-    def recommended_image
-    	@recommended_image ||=
-        begin
-    		  Image.where(purpose: options[:purpose], status: Image::STATUS_LIST['recommended']).first
-        rescue
-            nil
-        end
     end
 
     def free_ip_address

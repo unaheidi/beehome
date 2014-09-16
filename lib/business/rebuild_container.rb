@@ -1,13 +1,13 @@
 module Business
 	class RebuildContainer
-    attr_reader :options
+    attr_reader :options, :recommended_image
     def initialize(options = {container_id: "0efettttttt"})
       @options = options
     end
 
     def execute
-      debugger
       to_be_deleted_container.update_attributes(status: Container::STATUS_LIST['deleted'])
+      @recommended_image = Image.recommended_image(to_be_deleted_container.image.purpose)
       begin
         request = Service::Docker::Request.new(docker_remote_api: to_be_deleted_container.ip_address.device.docker_remote_api)
         request.delete_container(container: to_be_deleted_container.container_id)
@@ -29,15 +29,6 @@ module Business
           Container.where(container_id: options[:container_id]).first
         rescue
           nil
-        end
-    end
-
-    def recommended_image
-      @recommended_image ||=
-        begin
-          Image.where(purpose: to_be_deleted_container.image.purpose, status: Image::STATUS_LIST['recommended']).first
-        rescue
-            nil
         end
     end
 
