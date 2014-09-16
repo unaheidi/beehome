@@ -13,10 +13,10 @@ class IpAddress < ActiveRecord::Base
   end
 
   class << self
-    def free_ip_address
+    def free_ip_address(available_device_id)
       @free_ip_address ||=
         begin
-          IpAddress.where(device_id: available_device.id, status: IpAddress::STATUS_LIST['free']).first
+          IpAddress.free.where(device_id: available_device_id).first
         rescue
           nil
         end

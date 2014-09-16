@@ -1,6 +1,6 @@
 module Business
 	class ProduceContainer
-    attr_reader :options, :available_device, :recommended_image
+    attr_reader :options, :available_device, :recommended_image, :free_ip_address
     def initialize(options = {purpose: 'alpha'})
       @options = options
     end
@@ -10,7 +10,8 @@ module Business
       @recommended_image = Image.recommended_image(options[:purpose])
       return "[warning] No available device." unless available_device
       return "[warning] No recommended image." unless recommended_image
-
+      @free_ip_address = IpAddress.free_ip_address(available_device.id)
+      return "[warning] No free ip." unless free_ip_address
       begin
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
@@ -24,15 +25,6 @@ module Business
       rescue => e
         "[error] #{e}.#{result}."
       end
-    end
-
-    def free_ip_address
-    	@free_ip_address ||=
-        begin
-    		  IpAddress.where(device_id: available_device.id, status: IpAddress::STATUS_LIST['free']).first
-        rescue
-          nil
-        end
     end
 
     def update_db_status
