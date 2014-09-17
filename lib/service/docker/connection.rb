@@ -12,13 +12,13 @@ module Service::Docker
 
     def post(path, options = {}, style = "form")
       begin
-        #Timeout::timeout(@timeout) do
+        Timeout::timeout(@timeout) do
           headers = {
             'Content-Type' => 'application/json'
           }
           params = (style == "form") ? {:body => options, headers: headers} : {:query => options, headers: headers}
           self.class.post(path, params)
-        #end
+        end
       rescue => ex
         raise DockerConnectionError.new(ex)
       end
@@ -35,7 +35,6 @@ module Service::Docker
     end
 
     def delete(path, options = {})
-      debugger
       begin
         Timeout::timeout(@timeout) do
           self.class.delete(path, query: options)

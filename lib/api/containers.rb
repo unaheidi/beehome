@@ -12,7 +12,7 @@ module API
       	purpose = params["purpose"]
       	image_ids = Image.where(purpose: purpose, status: Image::STATUS_LIST['recommended']).pluck(:id)
       	containers = Container.where(status: Container::STATUS_LIST['available']).where(image_id: image_ids).limit(containers_number)
-        return {result: 0, message: "Failed.No free container or no image for the purpose."} if containers.blank?
+        return {result: 0, message: "Failed.No free container with recommended image."} if containers.blank?
         ip_addresses = []
         containers.each do |container|
         	container.update_attributes(status: Container::STATUS_LIST['used'])
