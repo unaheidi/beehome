@@ -14,12 +14,7 @@ class IpAddress < ActiveRecord::Base
 
   class << self
     def free_ip_address(available_device_id)
-      @free_ip_address ||=
-        begin
-          IpAddress.free.where(device_id: available_device_id).first
-        rescue
-          nil
-        end
+      IpAddress.free.where(device_id: available_device_id).first
     end
   end
 

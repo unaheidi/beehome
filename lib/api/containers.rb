@@ -27,12 +27,13 @@ module API
 
       post "rebuild" do
         container_ip = params["ip"]
+        return_url = params["return_url"]
         ip_address = IpAddress.where(address: container_ip).first
         return {result: 0, message: "Failed.No such ip record in ip_addresses table."} if ip_address.blank?
-        ip_address_id = IpAddress.where(address: container_ip).first.id
-        to_be_deleted_container = Container.where(ip_address_id: ip_address_id).where(status: Container::STATUS_LIST['used']).first
+        to_be_deleted_container = Container.where(ip_address_id: ip_address.id).where(status: Container::STATUS_LIST['used']).first
         return {result: 0, message: "Failed.No container with the specified ip in containers table."} if to_be_deleted_container.blank?
-        RebuildContainerWorker.perform_async(to_be_deleted_container.container_id)
+        rebuild_jid = RebuildContainerWorker.perform_async(to_be_deleted_container.container_id)
+        Business::DeliverContainer.delay_for(3.seconds, :retry => false).info_proposer(rebuild_jid,ip_address.address,return_url,[15,30,30])
         return {result: 1, message: "Beehome is going to rebuild the container with ip #{container_ip} !"}
       end
 

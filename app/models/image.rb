@@ -29,12 +29,7 @@ class Image < ActiveRecord::Base
 
   class << self
     def recommended_image(purpose)
-      @recommended_image ||=
-        begin
-          Image.recommended.where(purpose: purpose).first
-        rescue
-          nil
-        end
+      Image.recommended.where(purpose: purpose).first
     end
   end
 end

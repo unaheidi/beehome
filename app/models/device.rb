@@ -17,12 +17,7 @@ class Device < ActiveRecord::Base
 
   class << self
     def available_device
-      @available_device ||=
-        begin
-          Device.where(status: Device::STATUS_LIST['available']).first
-        rescue
-          nil
-        end
+      Device.where(status: Device::STATUS_LIST['available']).first
     end
   end
 end

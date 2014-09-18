@@ -8,12 +8,7 @@ class Container < ActiveRecord::Base
 
   class << self
     def to_be_deleted_container(container_id)
-      @to_be_deleted_container ||=
-        begin
-          Container.where(container_id: container_id).first
-        rescue
-          nil
-        end
+      Container.where(container_id: container_id).first
     end
   end
 end

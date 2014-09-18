@@ -20,7 +20,7 @@ module Business
         @container_id = result.to_hash["Id"]
         request.start_container(container: @container_id)
         create_container_record
-        @container_id
+        to_be_deleted_container.ip_address.address
       rescue => e
 
       end

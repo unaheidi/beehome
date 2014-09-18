@@ -49,10 +49,11 @@ gem 'jquery-rails'
 gem "httparty"
 
 # Background jobs
-gem 'sidekiq'
+gem 'sidekiq', '~> 2.16'
+gem 'sidekiq_status', '~> 1.0.7'
 
 group :development, :test do
-	gem "rspec-rails", '~> 3.0.0'
-	gem 'factory_girl_rails'
-	gem 'debugger'
+  gem "rspec-rails", '~> 3.0.0'
+  gem 'factory_girl_rails'
+  gem 'debugger'
 end
