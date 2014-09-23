@@ -52,6 +52,9 @@ gem "httparty"
 gem 'sidekiq', '~> 2.16'
 gem 'sidekiq_status', '~> 1.0.7'
 
+# Deploy
+gem 'capistrano-rails'
+
 group :development, :test do
   gem "rspec-rails", '~> 3.0.0'
   gem 'factory_girl_rails'
