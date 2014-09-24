@@ -1,3 +1,4 @@
+config/unicorn.rb
 *.out
 *.back
 *.bak

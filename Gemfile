@@ -55,8 +55,12 @@ gem 'sidekiq_status', '~> 1.0.7'
 # Deploy
 gem 'capistrano-rails'
 
+# Application server
+gem "unicorn-rails"
+
 group :development, :test do
   gem "rspec-rails", '~> 3.0.0'
   gem 'factory_girl_rails'
   gem 'debugger'
+  gem 'capistrano-unicorn', :require => false
 end
