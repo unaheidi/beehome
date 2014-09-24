@@ -43,7 +43,8 @@ gem 'jquery-rails'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano'
+gem 'capistrano', '~> 3.1'
+gem 'capistrano-bundler', '~> 1.1.2'
 
 # HTTP requests
 gem "httparty"
@@ -51,6 +52,7 @@ gem "httparty"
 # Background jobs
 gem 'sidekiq', '~> 2.16'
 gem 'sidekiq_status', '~> 1.0.7'
+gem 'capistrano-sidekiq'
 
 # Deploy
 gem 'capistrano-rails'
@@ -62,5 +64,6 @@ group :development, :test do
   gem "rspec-rails", '~> 3.0.0'
   gem 'factory_girl_rails'
   gem 'debugger'
-  gem 'capistrano-unicorn', :require => false
+  #gem 'capistrano-unicorn', require: false, github: 'inbeom/capistrano-unicorn', branch: 'capistrano3'
+  gem 'capistrano3-unicorn'
 end
