@@ -11,23 +11,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141009095725) do
+ActiveRecord::Schema.define(:version => 20141127074729) do
 
   create_table "containers", :force => true do |t|
     t.string   "container_id"
     t.integer  "image_id"
     t.integer  "ip_address_id"
+    t.string   "cpu_set"
+    t.integer  "processor_size"
+    t.string   "processor_occupy_mode"
+    t.integer  "memory_size"
     t.integer  "status"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
   end
 
   create_table "devices", :force => true do |t|
     t.string   "ip"
     t.string   "gateway"
     t.string   "os"
+    t.integer  "processor_size"
+    t.integer  "memory_size"
     t.string   "docker_remote_api"
     t.integer  "status"
+    t.string   "purpose"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
   end

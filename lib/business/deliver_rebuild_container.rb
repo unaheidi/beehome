@@ -1,5 +1,5 @@
 module Business
-  class DeliverContainer
+  class DeliverRebuildContainer
     include SidekiqStatus::Worker
 
     class << self
@@ -14,7 +14,7 @@ module Business
             puts "Deliver container with #{ip_address} failed."
           else
             puts "Deliver container again."
-            Business::DeliverContainer.delay_for(intervals.shift.seconds, :retry => false).info_proposer(rebuild_jid,ip_address,return_url,intervals || [])
+            Business::DeliverRebuildContainer.delay_for(intervals.shift.seconds, :retry => false).info_proposer(rebuild_jid,ip_address,return_url,intervals || [])
           end
         end
       end

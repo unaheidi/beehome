@@ -1,8 +1,11 @@
 class Container < ActiveRecord::Base
-  attr_accessible :container_id, :image_id, :ip_address_id, :status
+  attr_accessible :container_id, :image_id, :ip_address_id, :status,
+                  :cpu_set, :processor_size, :processor_occupy_mode, :memory_size
 
   belongs_to :image
   belongs_to :ip_address
+
+  scope :living, -> { where "status in (0,1)" }
 
   STATUS_LIST = {'available' => 0, 'used' => 1, 'deleted' => 2}
 

@@ -20,14 +20,15 @@ module Service::Docker
       end
     end
 
-    def create_container(options = {})
+    def create_container(purpose,options = {})
       params = {
         'Ip' => options[:ip] || options['ip'] , # '192.168.218.253/24@192.168.218.1'
         'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
-        'Memory' => 2621440000
+        'Memory' => options[:memory_size] || options['memory_size'],
+        'Cpuset' => options[:cpu_set] || options['cpu_set'],
       }
       begin
-        @conn.post("/containers/create?name=alpha_" + params['Ip'].sub(/\/.*/,''), params.to_json, "form")
+        @conn.post("/containers/create?name=#{purpose}_" + params['Ip'].sub(/\/.*/,''), params.to_json, "form")
       rescue DockerCreateContainerError => ex
         raise DockerCreateContainerError.new(ex)
       end
