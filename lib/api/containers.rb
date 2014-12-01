@@ -54,8 +54,9 @@ module API
             "memory_size" => 4,
           },
         ]
-        produce_jid = ProduceSpecialContainersWorker.perform_async(demands)
-        Business::DeliverSpecialContainers.delay_for(3.seconds, :retry => false).info_proposer(produce_jid,demands,return_url,[15,30,30])
+
+        produce_jid = ProduceSpecialContainersWorker.perform_async(demands.to_json)
+        Business::DeliverSpecialContainers.delay_for(3.seconds, :retry => false).info_proposer(produce_jid,return_url,[15,30,30])
         return {result: 1, message: "Beehome is going to provide the containers !"}
       end
 

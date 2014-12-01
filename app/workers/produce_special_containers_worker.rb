@@ -6,8 +6,10 @@ class ProduceSpecialContainersWorker
     message = []
     last_result = true
     produced_containers = []
+    demands = JSON.parse(demands)
     purpose = demands.first
-    demands[1..demands.size].try(:each) do |demand|
+
+    demands[1..demands.size].each do |demand|
       params = {processor_size: demand['processor_size'],
                 processor_occupy_mode: demand['processor_occupy_mode'],
                 memory_size: demand['memory_size']}
