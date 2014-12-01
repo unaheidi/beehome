@@ -5,6 +5,8 @@ class Image < ActiveRecord::Base
   validate :validate_image_id_correct, :on => :create
 
   scope :recommended, -> { where(status: Image::STATUS_LIST['recommended']) }
+  scope :alpha, -> { where(purpose: "alpha") }
+  scope :performance_test, -> { where(purpose: "performance_test") }
 
   STATUS_LIST = {'discarded' => 0, 'available' => 1, 'recommended' => 2}
 

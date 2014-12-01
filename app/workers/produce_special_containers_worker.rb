@@ -1,8 +1,7 @@
 class ProduceSpecialContainersWorker
-  include SidekiqStatus::Worker
-  sidekiq_options queue: :default, retry: false
+  include Sidekiq::Worker
 
-  def perform(demands)
+  def perform(demands,return_url)
     message = []
     last_result = true
     produced_containers = []
@@ -17,7 +16,6 @@ class ProduceSpecialContainersWorker
       if result[0] == false
         last_result = false
         message = "No device can provide #{demand['processor_size']} processors and #{demand['memory_size']}G memory."
-        self.payload = {result: last_result, message: message}
         produced_containers.try(:each) do |container_id|
           Business::DeleteContainer.new({container_id: container_id})
         end
@@ -27,7 +25,7 @@ class ProduceSpecialContainersWorker
       message.push(demand['id'] => result[2])
     end
 
-    self.payload = {result: last_result, message: message}
+    DeliverWorker.perform_async([last_result,message].to_json,return_url,[5, 10, 20 ,30])
   end
 
 end

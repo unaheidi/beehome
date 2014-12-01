@@ -7,10 +7,10 @@ module Business
 
     def execute
       @to_be_deleted_container = Container.to_be_deleted_container(options[:container_id])
-      return "[warning] The container to be deleted doesn't exist." unless to_be_deleted_container
+      return [false, "[warning] The container to be deleted doesn't exist."] unless to_be_deleted_container
       to_be_deleted_container.update_attributes(status: Container::STATUS_LIST['deleted'])
       @recommended_image = Image.recommended_image(to_be_deleted_container.image.purpose)
-      return "[warning] There's none recommended image for #{to_be_deleted_container.image.purpose} purpose." unless recommended_image
+      return [false, "[warning] There's none recommended image for #{to_be_deleted_container.image.purpose} purpose."] unless recommended_image
       begin
         request = Service::Docker::Request.new(docker_remote_api: to_be_deleted_container.ip_address.device.docker_remote_api)
         request.delete_container(container: to_be_deleted_container.container_id)
@@ -19,9 +19,9 @@ module Business
         @container_id = result.to_hash["Id"]
         request.start_container(container: @container_id)
         create_container_record
-        to_be_deleted_container.ip_address.address
+        [true, to_be_deleted_container.ip_address.address]
       rescue => e
-
+        [false, e]
       end
     end
 

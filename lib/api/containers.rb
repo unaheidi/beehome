@@ -29,13 +29,12 @@ module API
         return {result: 0, message: "Failed.No such ip record in ip_addresses table."} if ip_address.blank?
         to_be_deleted_container = Container.where(ip_address_id: ip_address.id).where(status: Container::STATUS_LIST['used']).first
         return {result: 1, message: "Failed.No container with the specified ip in containers table."} if to_be_deleted_container.blank?
-        rebuild_jid = RebuildContainerWorker.perform_async(to_be_deleted_container.container_id)
-        Business::DeliverRebuildContainer.delay_for(3.seconds, :retry => false).info_proposer(rebuild_jid,ip_address.address,return_url,[15,30,30])
+        RebuildContainerWorker.perform_async(to_be_deleted_container.container_id,return_url)
         return {result: 2, message: "Beehome is going to rebuild the container with ip #{container_ip} !"}
       end
 
       post "apply_special_containers" do
-        return_url = "http://baidu.com"
+        return_url = params["return_url"]
         demands = [
           "performance_test",
           {
@@ -52,13 +51,24 @@ module API
           },
         ]
 
-        produce_jid = ProduceSpecialContainersWorker.perform_async(demands.to_json)
-        Business::DeliverSpecialContainers.delay_for(3.seconds, :retry => false).info_proposer(produce_jid,return_url,[15,30,30])
+        ProduceSpecialContainersWorker.perform_async(demands.to_json,return_url)
         return {result: 0, message: "Beehome is going to provide the containers !"}
       end
 
-      post "delete_special_containers" do
+      post "delete_containers" do
+        return_url = params["return_url"]
+        container_ips = params["ips"].split(',').sort.uniq.delete_if{|e| !e.include?('.')}
 
+        container_ips.each do |container_ip|
+          ip_address = IpAddress.where(address: container_ip).first
+          return {result: 0, message: "Failed.No such ip #{container_ip} record in ip_addresses table."} if ip_address.blank?
+          to_be_deleted_container = Container.performance_test.where(ip_address_id: ip_address.id).
+                                      where(status: Container::STATUS_LIST['used']).first
+          return {result: 1, message: "Failed.No container with the specified ip #{container_ip} in containers table."} if to_be_deleted_container.blank?
+        end
+
+        DeleteContainersWorker.perform_async(container_ips,return_url)
+        return {result: 2, message: "Beehome is going to delete the containers !"}
       end
 
     end
