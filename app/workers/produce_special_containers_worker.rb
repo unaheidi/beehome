@@ -16,7 +16,7 @@ class ProduceSpecialContainersWorker
       result = Business::ProduceContainer.new(purpose, params).execute
       if result[0] == false
         last_result = false
-        message.push("No device can provide #{demand['processor_size']} processors and #{demand['memory_size']}G memory.")
+        message = "No device can provide #{demand['processor_size']} processors and #{demand['memory_size']}G memory."
         self.payload = {result: last_result, message: message}
         produced_containers.try(:each) do |container_id|
           Business::DeleteContainer.new({container_id: container_id})
