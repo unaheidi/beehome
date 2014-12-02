@@ -1,7 +1,7 @@
 module Business
 	class ProduceContainer
     attr_reader :purpose, :options, :available_device, :recommended_image, :free_ip_address, :cpu_set
-    def initialize(purpose,options = {processor_size: 4, processor_occupy_mode: 'private', memory_size: 4})
+    def initialize(purpose,options = {processor_size: 0, processor_occupy_mode: 'share', memory_size: 2})
       @purpose = purpose
       @options = options
     end
@@ -16,6 +16,7 @@ module Business
       begin
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
+        debugger
         result = request.create_container(purpose, container_params)
         @container_id = result.to_hash["Id"]
         request.start_container(container: @container_id)

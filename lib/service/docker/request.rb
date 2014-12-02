@@ -21,12 +21,21 @@ module Service::Docker
     end
 
     def create_container(purpose,options = {})
-      params = {
-        'Ip' => options[:ip] || options['ip'] , # '192.168.218.253/24@192.168.218.1'
-        'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
-        'Memory' => options[:memory_size] || options['memory_size'],
-        'Cpuset' => options[:cpu_set] || options['cpu_set'],
-      }
+      if ( options[:cpu_set] || options['cpu_set'] )
+        params = {
+          'Ip' => options[:ip] || options['ip'] , # '192.168.218.253/24@192.168.218.1'
+          'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
+          'Memory' => options[:memory_size] || options['memory_size'],
+          'Cpuset' => options[:cpu_set] || options['cpu_set'],
+        }
+      else
+        params = {
+          'Ip' => options[:ip] || options['ip'] , # '192.168.218.253/24@192.168.218.1'
+          'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
+          'Memory' => options[:memory_size] || options['memory_size'],
+        }
+      end
+
       begin
         @conn.post("/containers/create?name=#{purpose}_" + params['Ip'].sub(/\/.*/,''), params.to_json, "form")
       rescue DockerCreateContainerError => ex
