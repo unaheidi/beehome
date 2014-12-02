@@ -1,6 +1,8 @@
 class IpAddress < ActiveRecord::Base
   attr_accessible :address, :device_id, :netmask, :status
 
+  validates_uniqueness_of :address
+
   belongs_to :device
 
   scope :free, -> { where "status in (0)" }
