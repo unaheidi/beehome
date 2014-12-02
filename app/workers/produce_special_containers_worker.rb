@@ -22,10 +22,16 @@ class ProduceSpecialContainersWorker
         break
       end
       produced_containers.push(result[3])
+      update_db_status(result[3])
       message.push(demand['id'] => result[2])
     end
 
     DeliverWorker.perform_async([last_result,message].to_json,return_url,[5, 10, 20 ,30])
+  end
+
+  def update_db_status(container_id)
+    container = Container.where(container_id: container_id).first
+    container.update_attributes(status: Container::STATUS_LIST['used']) if container
   end
 
 end

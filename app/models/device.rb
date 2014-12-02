@@ -43,6 +43,7 @@ class Device < ActiveRecord::Base
 
   def free_memory
     used_memory = living_containers.pluck(:memory_size).reduce :+
+    used_memory = 0 unless used_memory
     self.memory_size - used_memory
   end
 
