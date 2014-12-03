@@ -36,10 +36,10 @@ module API
       post "apply_special_containers" do
         return_url = params["return_url"]
         demands = [
-          "performance_test",
+          "jagent",
           {
             "id" => '001',
-            "processor_size" => 2,
+            "processor_size" => 4,
             "processor_occupy_mode" => "private",
             "memory_size" => 4,
           },
@@ -56,18 +56,19 @@ module API
       end
 
       post "delete_containers" do
+        purpose = params["purpose"]
         return_url = params["return_url"]
         container_ips = params["ips"].split(',').sort.uniq.delete_if{|e| !e.include?('.')}
 
         container_ips.each do |container_ip|
           ip_address = IpAddress.where(address: container_ip).first
           return {result: 0, message: "Failed.No such ip #{container_ip} record in ip_addresses table."} if ip_address.blank?
-          to_be_deleted_container = Container.performance_test.where(ip_address_id: ip_address.id).
-                                      where(status: Container::STATUS_LIST['used']).first
-          return {result: 1, message: "Failed.No container with the specified ip #{container_ip} in containers table."} if to_be_deleted_container.blank?
+          to_be_deleted_container = Container.where(ip_address_id: ip_address.id).
+                                      where(status: Container::STATUS_LIST['used']).purpose(purpose).first
+          return {result: 1, message: "Failed.No #{purpose} container with the specified ip #{container_ip} in containers table."} if to_be_deleted_container.blank?
         end
 
-        DeleteContainersWorker.perform_async(container_ips,return_url)
+        DeleteContainersWorker.perform_async(container_ips,purpose,return_url)
         return {result: 2, message: "Beehome is going to delete the containers !"}
       end
 

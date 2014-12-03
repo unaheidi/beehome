@@ -4,6 +4,15 @@ module Business
     def initialize(purpose,options = {processor_size: 0, processor_occupy_mode: 'share', memory_size: 2})
       @purpose = purpose
       @options = options
+      if purpose == 'jagent'
+        options[:processor_occupy_mode] = 'private'
+        options[:processor_size] = 2
+        options[:memory_size] = 4
+      end
+
+      if purpose == 'alpha'
+        options[:memory_size] = 2
+      end
     end
 
     def execute
@@ -16,7 +25,6 @@ module Business
       begin
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
-        debugger
         result = request.create_container(purpose, container_params)
         @container_id = result.to_hash["Id"]
         request.start_container(container: @container_id)
@@ -24,7 +32,7 @@ module Business
         create_container_record
         [true, "[info] Produce a container successfully.", free_ip_address.address, @container_id]
       rescue => e
-        [false, "[error] #{e}.#{result}."]
+        [false, "[error] #{e}."]
       end
     end
 
@@ -50,29 +58,29 @@ module Business
     end
 
     def container_params
+      ip = free_ip_address.address + '/' +
+            free_ip_address.netmask + '@' +
+              free_ip_address.device.gateway
+      image = recommended_image.repository + ':' + recommended_image.tag
+      memory_size = options[:memory_size] * 1024 * 1024 * 1024
+
       if purpose == 'alpha'
-        { ip: free_ip_address.address + '/' + free_ip_address.netmask + '@' + free_ip_address.device.gateway,
-          image: recommended_image.repository + ':' + recommended_image.tag,
-          memory_size:  2147483648,
-        }
-      elsif purpose == 'performance_test' && options[:processor_occupy_mode] == "private"
+        return { ip: ip, image: image, memory_size:  memory_size}
+      end
+
+      if purpose == 'jagent'
+        @cpu_set = available_device.free_processor_set.slice(0,2).join(',')
+        return { ip: ip, image: image, memory_size: memory_size, cpu_set: cpu_set }
+      end
+
+      if purpose == 'performance_test' && options[:processor_occupy_mode] == "private"
         @cpu_set = available_device.free_processor_set.slice(0,options[:processor_size]).join(',')
-        { ip: free_ip_address.address + '/' +
-              free_ip_address.netmask + '@' +
-              free_ip_address.device.gateway,
-          image: recommended_image.repository + ':' + recommended_image.tag,
-          memory_size: options[:memory_size] * 1024 * 1024 * 1024,
-          cpu_set:  cpu_set,
-        }
-      elsif purpose == 'performance_test' && options[:processor_occupy_mode] == "share"
+        return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
+      end
+
+      if purpose == 'performance_test' && options[:processor_occupy_mode] == "share"
         @cpu_set = available_device.share_free_processor_set_string(options[:processor_size])
-        { ip: free_ip_address.address + '/' +
-              free_ip_address.netmask + '@' +
-              free_ip_address.device.gateway,
-          image: recommended_image.repository + ':' + recommended_image.tag,
-          memory_size: options[:memory_size] * 1024 * 1024 * 1024,
-          cpu_set:  cpu_set,
-        }
+        return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
       end
     end
 

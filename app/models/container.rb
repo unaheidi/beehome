@@ -6,8 +6,7 @@ class Container < ActiveRecord::Base
   belongs_to :ip_address
 
   scope :living, -> { where "status in (0,1)" }
-  scope :alpha, -> { where(image_id: Image.alpha.pluck(:id)) }
-  scope :performance_test, -> { where(image_id: Image.performance_test.pluck(:id)) }
+  scope :purpose, ->(purpose) { where(image_id: Image.purpose(purpose).pluck(:id)) }
 
   STATUS_LIST = {'available' => 0, 'used' => 1, 'deleted' => 2}
 

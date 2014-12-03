@@ -7,6 +7,7 @@ class Device < ActiveRecord::Base
   has_many :ip_addresses, dependent: :destroy
 
   scope :unavailable, -> { where "status in (0,1)" }
+  scope :purpose, ->(purpose) { where("purpose like '%#{purpose}%'") }
 
   STATUS_LIST = {'bad' => 0, 'full' => 1, 'available' => 2}
 
@@ -57,19 +58,18 @@ class Device < ActiveRecord::Base
   end
 
   class << self
-    def available_device(purpose,
-                         options = {processor_size: 4, processor_occupy_mode: 'private', memory_size: 4}
-                        )
+    def available_device(purpose, options)
       if purpose == "alpha"
-        Device.where(purpose: purpose).where(status: Device::STATUS_LIST['available']).first
+        Device.purpose(purpose).where(status: Device::STATUS_LIST['available']).first
       else
         satisfied_device(purpose, options)
       end
     end
 
     def satisfied_device(purpose,options)
-      filted_devices = Device.where(purpose: purpose).where(status: Device::STATUS_LIST['available'])
+      filted_devices = Device.purpose(purpose).where(status: Device::STATUS_LIST['available'])
       filted_devices.select{|device| device.can_satisfied?(purpose, options)}.first
     end
+
   end
 end
