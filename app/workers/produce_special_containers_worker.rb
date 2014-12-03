@@ -23,7 +23,7 @@ class ProduceSpecialContainersWorker
       end
       produced_containers.push(result[3])
       update_db_status(result[3])
-      message.push(demand['id'] => result[2])
+      message.push(machine['id'] => result[2])
     end
 
     DeliverWorker.perform_async([last_result,message].to_json,return_url,[5, 10, 20 ,30])
