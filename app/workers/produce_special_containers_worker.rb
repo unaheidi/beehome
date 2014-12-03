@@ -12,7 +12,7 @@ class ProduceSpecialContainersWorker
                 processor_occupy_mode: machine["processor_occupy_mode"],
                 memory_size: machine["memory_size"].to_i}
       result = Business::ProduceContainer.new(purpose, params).execute
-      if result[0] == false
+      if result["result"] == false
         last_result = false
         message = "No device can provide #{params[:processor_size]} processors and #{params[:memory_size]}G memory."
         produced_containers.try(:each) do |container_id|
@@ -20,12 +20,12 @@ class ProduceSpecialContainersWorker
         end
         break
       end
-      produced_containers.push(result[3])
-      update_db_status(result[3])
-      message.push(machine['id'] => result[2])
+      produced_containers.push(result["ip"])
+      update_db_status(result["container_id"])
+      message.push({"id" => machine["id"], "ip" => result["ip"]})
     end
 
-    DeliverWorker.perform_async([last_result,message].to_json,return_url,[5, 10, 20 ,30])
+    DeliverWorker.perform_async({"result" => last_result,"message" => message},return_url,[5, 10, 20 ,30]) if return_url
   end
 
   def update_db_status(container_id)

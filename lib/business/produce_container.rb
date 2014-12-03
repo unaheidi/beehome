@@ -1,6 +1,10 @@
 module Business
 	class ProduceContainer
     attr_reader :purpose, :options, :available_device, :recommended_image, :free_ip_address, :cpu_set
+
+    include Utils::Logger
+    include Utils::Time
+
     def initialize(purpose,options = {processor_size: 0, processor_occupy_mode: 'share', memory_size: 2})
       @purpose = purpose
       @options = options
@@ -13,15 +17,17 @@ module Business
       if purpose == 'alpha'
         options[:memory_size] = 2
       end
+
+      self.logger_file = logger_file_name
     end
 
     def execute
       @available_device = Device.available_device(purpose, options)
       @recommended_image = Image.recommended_image(purpose)
-      return [false, "[warning] No available device."] unless available_device
-      return [false, "[warning] No recommended image."] unless recommended_image
+      return {"result" => false, "message" => "[warning] No available device."} unless available_device
+      return {"result" => false, "message" => "[warning] No recommended image."} unless recommended_image
       @free_ip_address = IpAddress.free_ip_address(available_device.id)
-      return [false, "[warning] No free ip."] unless free_ip_address
+      return {"result" => false, "message" => "[warning] No free ip."} unless free_ip_address
       begin
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
@@ -30,9 +36,14 @@ module Business
         request.start_container(container: @container_id)
         update_db_status
         create_container_record
-        [true, "[info] Produce a container successfully.", free_ip_address.address, @container_id]
+        {"result" => true, "message" => "[info] Produce a container successfully.", "ip" => free_ip_address.address, "container_id" => @container_id}
       rescue => e
-        [false, "[error] #{e}."]
+        logger.error("Produce container failed, error message: #{e}, #{ts}.\
+                      demand: #{options['processor_size']}cpu_\
+                              #{options['processor_occupy_mode']}_\
+                              #{options['memory_size']}G memory.
+                    ")
+        {"result" => false, "message" => "[error] #{e}."}
       end
     end
 
@@ -82,6 +93,10 @@ module Business
         @cpu_set = available_device.share_free_processor_set_string(options[:processor_size])
         return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
       end
+    end
+
+    def logger_file_name
+      @logger_file_name = "produce_container/#{purpose}.log"
     end
 
 	end

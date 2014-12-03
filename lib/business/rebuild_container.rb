@@ -1,16 +1,18 @@
 module Business
 	class RebuildContainer
     attr_reader :options, :recommended_image, :to_be_deleted_container
+
+
     def initialize(options = {container_id: "0efettttttt"})
       @options = options
     end
 
     def execute
       @to_be_deleted_container = Container.to_be_deleted_container(options[:container_id])
-      return [false, "[warning] The container to be deleted doesn't exist."] unless to_be_deleted_container
+      return {"result" => false, "message" => "[warning] The container to be deleted doesn't exist."} unless to_be_deleted_container
       to_be_deleted_container.update_attributes(status: Container::STATUS_LIST['deleted'])
       @recommended_image = Image.recommended_image(to_be_deleted_container.image.purpose)
-      return [false, "[warning] There's none recommended image for #{to_be_deleted_container.image.purpose} purpose."] unless recommended_image
+      return {"result" => false, "message" => "[warning] There's none recommended image for #{to_be_deleted_container.image.purpose} purpose."} unless recommended_image
       begin
         request = Service::Docker::Request.new(docker_remote_api: to_be_deleted_container.ip_address.device.docker_remote_api)
         request.delete_container(container: to_be_deleted_container.container_id)
@@ -19,9 +21,9 @@ module Business
         @container_id = result.to_hash["Id"]
         request.start_container(container: @container_id)
         create_container_record
-        [true, to_be_deleted_container.ip_address.address]
+        {"result" => true, "message" => to_be_deleted_container.ip_address.address}
       rescue => e
-        [false, e]
+        {"result" => false, "message" => e}
       end
     end
 

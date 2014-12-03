@@ -7,16 +7,16 @@ module Business
 
     def execute
       @to_be_deleted_container = Container.to_be_deleted_container(options[:container_id])
-      return [false,"[warning] The container once was deleted before."] if to_be_deleted_container.status == Container::STATUS_LIST['deleted']
-      return [false,"[warning] The container to be deleted doesn't exist."] unless to_be_deleted_container
+      return {"result" => false,"message" => "[warning] The container once was deleted before."} if to_be_deleted_container.status == Container::STATUS_LIST['deleted']
+      return {"result" => false,"message" => "[warning] The container to be deleted doesn't exist."} unless to_be_deleted_container
       to_be_deleted_container.update_attributes(status: Container::STATUS_LIST['deleted'])
       begin
         request = Service::Docker::Request.new(docker_remote_api: to_be_deleted_container.ip_address.device.docker_remote_api)
         request.delete_container(container: to_be_deleted_container.container_id)
         update_db_status
-        [true,to_be_deleted_container.ip_address.address]
+        {"result" => true,"ip" => to_be_deleted_container.ip_address.address}
       rescue => e
-        [false,e]
+        {"result" => false, "message" => e}
       end
     end
 
