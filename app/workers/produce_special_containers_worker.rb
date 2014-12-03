@@ -1,17 +1,17 @@
 class ProduceSpecialContainersWorker
   include Sidekiq::Worker
 
-  def perform(demands,return_url)
+  def perform(demand,return_url)
     message = []
     last_result = true
     produced_containers = []
-    demands = JSON.parse(demands)
-    purpose = demands.first
+    demand = JSON.parse(demand)
+    purpose = demand["purpose"]
 
-    demands[1..demands.size].each do |demand|
-      params = {processor_size: demand['processor_size'],
-                processor_occupy_mode: demand['processor_occupy_mode'],
-                memory_size: demand['memory_size']}
+    demand["machines"].each do |machine|
+      params = {processor_size: machine["processor_size"],
+                processor_occupy_mode: machine["processor_occupy_mode"],
+                memory_size: machine["memory_size"]}
       result = Business::ProduceContainer.new(purpose, params).execute
       if result[0] == false
         last_result = false

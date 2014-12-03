@@ -35,23 +35,26 @@ module API
 
       post "apply_special_containers" do
         return_url = params["return_url"]
-        demands = [
-          "jagent",
-          {
-            "id" => '001',
-            "processor_size" => 4,
-            "processor_occupy_mode" => "private",
-            "memory_size" => 4,
-          },
-          {
-            "id" => '002',
-            "processor_size" => 4,
-            "processor_occupy_mode" => "share",
-            "memory_size" => 4,
-          },
-        ]
+        demand = params["demand"]
 
-        ProduceSpecialContainersWorker.perform_async(demands.to_json,return_url)
+        demand = {
+          purpose: "jagent",
+          machines: [
+                      {
+                        "id" => "001",
+                        "processor_size" => 4,
+                        "processor_occupy_mode" => "private",
+                        "memory_size" => 4,
+                      },
+                      {
+                        "id" => "002",
+                        "processor_size" => 4,
+                        "processor_occupy_mode" => "share",
+                        "memory_size" => 4,
+                      }
+                    ]
+        }
+        ProduceSpecialContainersWorker.perform_async(demand.to_json,return_url)
         return {result: 0, message: "Beehome is going to provide the containers !"}
       end
 
