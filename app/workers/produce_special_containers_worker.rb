@@ -1,21 +1,20 @@
 class ProduceSpecialContainersWorker
   include Sidekiq::Worker
 
-  def perform(demand,return_url)
+  def perform(purpose,machines,return_url)
     message = []
     last_result = true
     produced_containers = []
-    demand = JSON.parse(demand)
-    purpose = demand["purpose"]
+    purpose = purpose
 
-    demand["machines"].each do |machine|
-      params = {processor_size: machine["processor_size"],
+    machines.each do |machine|
+      params = {processor_size: machine["processor_size"].to_i,
                 processor_occupy_mode: machine["processor_occupy_mode"],
-                memory_size: machine["memory_size"]}
+                memory_size: machine["memory_size"].to_i}
       result = Business::ProduceContainer.new(purpose, params).execute
       if result[0] == false
         last_result = false
-        message = "No device can provide #{demand['processor_size']} processors and #{demand['memory_size']}G memory."
+        message = "No device can provide #{params[:processor_size]} processors and #{params[:memory_size]}G memory."
         produced_containers.try(:each) do |container_id|
           Business::DeleteContainer.new({container_id: container_id})
         end

@@ -34,28 +34,16 @@ module API
       end
 
       post "apply_special_containers" do
+        return {result: 0, message: "No params error!"} if params.nil?
         return_url = params["return_url"]
-        demand = params["demand"]
+        purpose = params["purpose"]
+        machines = params["machines"]
+        return {result: 0, message: "No return_url error!"} if return_url.nil?
+        return {result: 0, message: "No purpose error!"} if purpose.nil?
+        return {result: 0, message: "No machiens error!"} if machines.nil?
 
-        demand = {
-          purpose: "jagent",
-          machines: [
-                      {
-                        "id" => "001",
-                        "processor_size" => 4,
-                        "processor_occupy_mode" => "private",
-                        "memory_size" => 4,
-                      },
-                      {
-                        "id" => "002",
-                        "processor_size" => 4,
-                        "processor_occupy_mode" => "share",
-                        "memory_size" => 4,
-                      }
-                    ]
-        }
-        ProduceSpecialContainersWorker.perform_async(demand.to_json,return_url)
-        return {result: 0, message: "Beehome is going to provide the containers !"}
+        ProduceSpecialContainersWorker.perform_async(purpose,machines,return_url)
+        return {result: 1, message: "Beehome is going to provide the containers !"}
       end
 
       post "delete_containers" do
