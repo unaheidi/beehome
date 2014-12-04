@@ -1,5 +1,5 @@
 class RebuildContainerWorker
-  include SidekiqStatus::Worker
+  include Sidekiq::Worker
 
   def perform(container_id,return_url)
     result = Business::RebuildContainer.new(container_id: container_id).execute # container_id: ce1cbfbefe45

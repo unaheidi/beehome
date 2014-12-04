@@ -27,6 +27,7 @@ module Service::Docker
           'Image' => options[:image] || options['image'],  # 'docker.diors.it/alpha_machine:v1.0'
           'Memory' => options[:memory_size] || options['memory_size'],
           'Cpuset' => options[:cpu_set] || options['cpu_set'],
+          'Privileged' => true
         }
       else
         params = {
@@ -46,6 +47,7 @@ module Service::Docker
     def start_container(options = {})
       params = {
         "PublishAllPorts" => true,
+        "Privileged" => true
       }
       container = options[:container] || options['container']
       begin

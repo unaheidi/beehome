@@ -38,11 +38,7 @@ module Business
         create_container_record
         {"result" => true, "message" => "[info] Produce a container successfully.", "ip" => free_ip_address.address, "container_id" => @container_id}
       rescue => e
-        logger.error("Produce container failed, error message: #{e}, #{ts}.\
-                      demand: #{options['processor_size']}cpu_\
-                              #{options['processor_occupy_mode']}_\
-                              #{options['memory_size']}G memory.
-                    ")
+        logger.error("Produce container failed, error message: #{e}. #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory.")
         {"result" => false, "message" => "[error] #{e}."}
       end
     end

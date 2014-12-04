@@ -1,5 +1,5 @@
 class DeleteContainersWorker
-  include SidekiqStatus::Worker
+  include Sidekiq::Worker
 
   def perform(container_ips,purpose,return_url)
   	last_result = true

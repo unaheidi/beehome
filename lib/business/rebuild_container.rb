@@ -2,9 +2,12 @@ module Business
 	class RebuildContainer
     attr_reader :options, :recommended_image, :to_be_deleted_container
 
+    include Utils::Logger
+    include Utils::Time
 
     def initialize(options = {container_id: "0efettttttt"})
       @options = options
+      self.logger_file = logger_file_name
     end
 
     def execute
@@ -23,6 +26,9 @@ module Business
         create_container_record
         {"result" => true, "message" => to_be_deleted_container.ip_address.address}
       rescue => e
+        logger.error("Rebuild container failed, error message: #{e}, #{ts}.\
+                      container_id: #{to_be_deleted_container.container_id}.
+                    ")
         {"result" => false, "message" => e}
       end
     end
@@ -58,6 +64,10 @@ module Business
           cpu_set:  to_be_deleted_container.cpu_set,
         }
       end
+    end
+
+    def logger_file_name
+      @logger_file_name = "rebuild_container/all.log"
     end
 
   end
