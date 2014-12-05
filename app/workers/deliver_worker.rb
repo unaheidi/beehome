@@ -6,6 +6,7 @@ class DeliverWorker
   def perform(information,return_url,intervals)
     self.logger_file = logger_file_name
     begin
+      return_url.gsub!(/http:\/\//,'')
       result = Service::Gitpub::Connection.new(gitpub_url: return_url[0..return_url.index('/')]).post(return_url[return_url.index('/')..-1], information, "query")
     rescue => e
       if intervals.blank?
