@@ -1,3 +1,4 @@
+.capistrano
 config/unicorn.rb
 *.out
 *.back
