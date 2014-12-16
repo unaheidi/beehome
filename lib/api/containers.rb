@@ -8,10 +8,10 @@ module API
       end
 
       get "apply_random_containers" do
-      	containers_number = params["number"].to_i
-      	purpose = params["purpose"]
-      	image_ids = Image.where(purpose: purpose, status: Image::STATUS_LIST['recommended']).pluck(:id)
-      	containers = Container.where(status: Container::STATUS_LIST['available']).where(image_id: image_ids).limit(containers_number)
+        containers_number = params["number"].to_i
+        purpose = params["purpose"]
+        image_ids = Image.where(purpose: purpose, status: Image::STATUS_LIST['recommended']).pluck(:id)
+        containers = Container.where(status: Container::STATUS_LIST['available']).where(image_id: image_ids).limit(containers_number)
         return {result: 0, message: "Failed.No free container with recommended image."} if containers.blank?
         return {result: 0, message: "Less than the request numer."} if containers.size < containers_number
         ip_addresses = []

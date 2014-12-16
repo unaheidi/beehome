@@ -1,5 +1,4 @@
-class Container < ActiveRecord::Base
-  attr_accessible :container_id, :image_id, :ip_address_id, :status,
+class Container < ActiveRecord::Base attr_accessible :container_id, :image_id, :ip_address_id, :status,
                   :cpu_set, :processor_size, :processor_occupy_mode, :memory_size
 
   belongs_to :image

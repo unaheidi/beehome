@@ -60,6 +60,10 @@ gem 'capistrano-rails'
 # Application server
 gem "unicorn-rails"
 
+# whenever
+gem 'whenever', :require => false
+gem 'settingslogic'
+
 group :development, :test do
   gem "rspec-rails", '~> 3.0.0'
   gem 'factory_girl_rails'
