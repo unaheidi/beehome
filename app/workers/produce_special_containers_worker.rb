@@ -1,7 +1,7 @@
 class ProduceSpecialContainersWorker
   include Sidekiq::Worker
 
-  def perform(purpose,machines,return_url)
+  def perform(purpose,uid,machines,return_url)
     message = []
     last_result = true
     produced_containers = []
@@ -25,7 +25,7 @@ class ProduceSpecialContainersWorker
       message.push({"id" => machine["id"], "ip" => result["ip"]})
     end
 
-    DeliverWorker.perform_async({"result" => last_result,"message" => message},return_url,[5, 10, 20 ,30]) if return_url
+    DeliverWorker.perform_async({"uid"=> uid,"result" => last_result,"message" => message},return_url,[5, 10, 20 ,30]) if return_url
   end
 
   def update_db_status(container_id)

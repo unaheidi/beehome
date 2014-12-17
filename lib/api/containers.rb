@@ -36,13 +36,15 @@ module API
       post "apply_special_containers" do
         return {result: 0, message: "No params error!"} if params.nil?
         return_url = params["return_url"]
+        uid = params["uid"]
         purpose = params["purpose"]
         machines = params["machines"]
         return {result: 0, message: "No return_url error!"} if return_url.nil?
         return {result: 0, message: "No purpose error!"} if purpose.nil?
         return {result: 0, message: "No machiens error!"} if machines.nil?
+        return {result: 0, message: "No uid error!"} if uid.nil?
 
-        ProduceSpecialContainersWorker.perform_async(purpose,machines,return_url)
+        ProduceSpecialContainersWorker.perform_async(purpose,uid,machines,return_url)
         return {result: 1, message: "Beehome is going to provide the containers !"}
       end
 
