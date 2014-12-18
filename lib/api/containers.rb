@@ -49,19 +49,26 @@ module API
       end
 
       post "delete_containers" do
-        purpose = params["purpose"]
-        return_url = params["return_url"]
-        container_ips = params["ips"].split(',').sort.uniq.delete_if{|e| !e.include?('.')}
+        uid = params['uid']
+        purpose = params['purpose']
+        return_url = params['return_url']
 
-        container_ips.each do |container_ip|
-          ip_address = IpAddress.where(address: container_ip).first
-          return {result: 0, message: "Failed.No such ip #{container_ip} record in ip_addresses table."} if ip_address.blank?
+        machines = params['machines']
+
+        machines.each do |machine|
+
+          ip = machine["ip"]
+
+          ip_address = IpAddress.where(address: ip).first
+          return {result: 0, message: "Failed.No such ip #{ip} record in ip_addresses table."} if ip_address.blank?
           to_be_deleted_container = Container.where(ip_address_id: ip_address.id).
                                       where(status: Container::STATUS_LIST['used']).purpose(purpose).first
-          return {result: 1, message: "Failed.No #{purpose} container with the specified ip #{container_ip} in containers table."} if to_be_deleted_container.blank?
+          return {result: 1, message: "Failed.No #{purpose} container with the specified ip #{ip} in containers table."} if to_be_deleted_container.blank?
+
         end
 
-        DeleteContainersWorker.perform_async(container_ips,purpose,return_url)
+
+        DeleteContainersWorker.perform_async(uid, machines, purpose, return_url)
         return {result: 2, message: "Beehome is going to delete the containers !"}
       end
 
