@@ -17,6 +17,7 @@ class DeleteContainersWorker
       message.push(result)
       message.push({"id" => machine['id'], "state" => result["result"]})
   	end
+    Rails.logger.info("callback :result: #{last_result} uid:#{uid} message: #{message}")
     DeliverWorker.perform_async({"result" => last_result, "uid" => uid, "message" => message},return_url,[5, 10, 20 ,30]) if return_url
   end
 end
