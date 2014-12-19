@@ -49,29 +49,20 @@ module API
       end
 
       post "delete_containers" do
-        Rails.logger.info("start delete container uid:#{uid} purpose:#{purpose} machines: #{machines}")
-
         uid = params['uid']
         purpose = params['purpose']
         return_url = params['return_url']
-
         machines = params['machines']
 
         machines.each do |machine|
-          Rails.logger.info("machine : #{machine}")
           ip = machine["ip"]
-           Rails.logger.info("ip : #{ip}")
-
           ip_address = IpAddress.where(address: ip).first
-           Rails.logger.info("ip_address : #{ip_address}")
           return {result: 0, message: "Failed.No such ip #{ip} record in ip_addresses table."} if ip_address.blank?
           to_be_deleted_container = Container.where(ip_address_id: ip_address.id).
                                       where(status: Container::STATUS_LIST['used']).purpose(purpose).first
           return {result: 1, message: "Failed.No #{purpose} container with the specified ip #{ip} in containers table."} if to_be_deleted_container.blank?
 
         end
-
-
         DeleteContainersWorker.perform_async(uid, machines, purpose, return_url)
         return {result: 2, message: "Beehome is going to delete the containers !"}
       end
