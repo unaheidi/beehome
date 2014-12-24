@@ -19,13 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 #every 1.days, :at => '5:25 pm' do
-set :environment, ENV['RAILS_ENV']
 
-ENV.each do |k, v|
-  env k.to_sym, v
-end
-
-
-every 5.minutes do
+every 10.minutes do
   rake "collect_unused_performance_container"
 end
