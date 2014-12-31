@@ -20,7 +20,7 @@ class ProduceSpecialContainersWorker
         end
         break
       end
-      produced_containers.push(result["ip"])
+      produced_containers.push(result["container_id"])
       update_db_status(result["container_id"])
       message.push({"id" => machine["id"], "ip" => result["ip"]})
     end

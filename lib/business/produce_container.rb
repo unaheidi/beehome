@@ -1,5 +1,5 @@
 module Business
-	class ProduceContainer
+  class ProduceContainer
     attr_reader :purpose, :options, :available_device, :recommended_image, :free_ip_address, :cpu_set
 
     include Utils::Logger
@@ -33,10 +33,17 @@ module Business
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
         result = request.create_container(purpose, container_params)
         @container_id = result.to_hash["Id"]
-        request.start_container(container: @container_id)
-        update_db_status
-        create_container_record
-        {"result" => true, "message" => "[info] Produce a container successfully.", "ip" => free_ip_address.address, "container_id" => @container_id}
+        if @container_id
+          request.start_container(container: @container_id)
+          update_db_status
+          create_container_record if @container_id
+          {"result" => true, "message" => "[info] Produce a container successfully.", "ip" => free_ip_address.address, "container_id" => @container_id}
+        else
+          logger.error("Produce container failed, error message: unkonwn." +
+                       " #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory." +
+                       "Please check the #{available_device.ip} device!")
+          {"result" => false, "message" => "[error] unkonwn."}
+        end
       rescue => e
         logger.error("Produce container failed, error message: #{e}." +
                      " #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory." +
@@ -97,5 +104,5 @@ module Business
       @logger_file_name = "produce_container/#{purpose}.log"
     end
 
-	end
+  end
 end
