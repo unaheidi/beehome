@@ -29,6 +29,7 @@ module Business
       @free_ip_address = IpAddress.free_ip_address(available_device.id)
       return {"result" => false, "message" => "[warning] No free ip."} unless free_ip_address
       begin
+        free_ip_address.update_attributes(status: IpAddress::STATUS_LIST['used'])
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
         result = request.create_container(purpose, container_params)
@@ -39,12 +40,14 @@ module Business
           create_container_record if @container_id
           {"result" => true, "message" => "[info] Produce a container successfully.", "ip" => free_ip_address.address, "container_id" => @container_id}
         else
+          free_ip_address.update_attributes(status: IpAddress::STATUS_LIST['free'])
           logger.error("Produce container failed, error message: unkonwn." +
                        " #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory." +
                        "Please check the #{available_device.ip} device!")
           {"result" => false, "message" => "[error] unkonwn."}
         end
       rescue => e
+        free_ip_address.update_attributes(status: IpAddress::STATUS_LIST['free'])
         logger.error("Produce container failed, error message: #{e}." +
                      " #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory." +
                      "Please check the #{available_device.ip} device!")
