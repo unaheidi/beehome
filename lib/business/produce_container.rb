@@ -34,20 +34,23 @@ module Business
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
         result = request.create_container(purpose, container_params)
         @container_id = result.to_hash["Id"]
-        if @container_id
-          request.start_container(container: @container_id)
+        start_status = request.start_container(container: @container_id).response.code if @container_id
+
+        if @container_id && start_status == "204"
           update_db_status
           create_container_record if @container_id
           {"result" => true, "message" => "[info] Produce a container successfully.", "ip" => free_ip_address.address, "container_id" => @container_id}
         else
           free_ip_address.update_attributes(status: IpAddress::STATUS_LIST['free'])
-          logger.error("Produce container failed, error message: unkonwn." +
+          request.delete_container(container: @container_id) if @container_id
+          logger.error("Produce container failed, error message: unknown." +
                        " #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory." +
                        "Please check the #{available_device.ip} device!")
-          {"result" => false, "message" => "[error] unkonwn."}
+          {"result" => false, "message" => "[error] unknown."}
         end
       rescue => e
         free_ip_address.update_attributes(status: IpAddress::STATUS_LIST['free'])
+        request.delete_container(container: @container_id) if @container_id
         logger.error("Produce container failed, error message: #{e}." +
                      " #{purpose}:#{options[:processor_size]}cpu_#{options[:processor_occupy_mode]}_#{options[:memory_size]}G memory." +
                      "Please check the #{available_device.ip} device!")
