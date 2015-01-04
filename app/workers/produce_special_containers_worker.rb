@@ -7,7 +7,7 @@ class ProduceSpecialContainersWorker
   def perform(purpose,uid,machines,return_url)
     if lock.acquire!
       begin
-        try_to_deliver_containers(purpose,uid,machines,return_url)
+        try_to_produce_containers(purpose,uid,machines,return_url)
       ensure
         lock.release!
       end
