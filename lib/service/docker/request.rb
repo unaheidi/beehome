@@ -51,7 +51,7 @@ module Service::Docker
       }
       container = options[:container] || options['container']
       begin
-        @conn.post("/containers/#{container}/start", params.to_json, "form").body
+        @conn.post("/containers/#{container}/start", params.to_json, "form").response.code
       rescue DockerStartContainerError => ex
         raise DockerStartContainerError.new(ex)
       end
@@ -63,7 +63,7 @@ module Service::Docker
       }
       container = options[:container] || options['container']
       begin
-        @conn.delete("/containers/#{container}", params).body
+        @conn.delete("/containers/#{container}", params).response.code
       rescue DockerDeleteContainerError => ex
         raise DockerDeleteContainerError.new(ex)
       end

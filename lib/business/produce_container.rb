@@ -34,7 +34,7 @@ module Business
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
         result = request.create_container(purpose, container_params)
         @container_id = result.to_hash["Id"]
-        start_status = request.start_container(container: @container_id).response.code if @container_id
+        start_status = request.start_container(container: @container_id) if @container_id
 
         if @container_id && start_status == "204"
           update_db_status
