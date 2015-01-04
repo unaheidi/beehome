@@ -1,7 +1,22 @@
 class ProduceSpecialContainersWorker
   include Sidekiq::Worker
+  include Sidekiq::Lock::Worker
+
+  sidekiq_options lock: { timeout: 1000, name: 'lock-worker' }
 
   def perform(purpose,uid,machines,return_url)
+    if lock.acquire!
+      begin
+        try_to_deliver_containers(purpose,uid,machines,return_url)
+      ensure
+        lock.release!
+      end
+    else
+      ProduceSpecialContainersWorker.perform_async(purpose,uid,machines,return_url)
+    end
+  end
+
+  def try_to_produce_containers(purpose,uid,machines,return_url)
     message = []
     last_result = true
     produced_containers = []

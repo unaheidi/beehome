@@ -64,6 +64,9 @@ gem "unicorn-rails"
 gem 'whenever', :require => false
 gem 'settingslogic'
 
+# sidekiq-lock
+gem 'sidekiq-lock'
+
 group :development, :test do
   gem "rspec-rails", '~> 3.0.0'
   gem 'factory_girl_rails'
