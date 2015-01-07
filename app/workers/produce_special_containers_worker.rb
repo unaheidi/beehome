@@ -1,10 +1,12 @@
 class ProduceSpecialContainersWorker
   include Sidekiq::Worker
   include Sidekiq::Lock::Worker
+  include Utils::Logger
 
   sidekiq_options lock: { timeout: 1000, name: 'lock-worker' }
 
   def perform(purpose,uid,machines,return_url)
+    self.logger_file = logger_file_name
     if lock.acquire!
       begin
         try_to_produce_containers(purpose,uid,machines,return_url)
@@ -31,6 +33,7 @@ class ProduceSpecialContainersWorker
         last_result = false
         message = "Can not provide #{params[:processor_size]} processors and #{params[:memory_size]}G memory for #{purpose}."
         produced_containers.try(:each) do |container_id|
+          logger.info("Delete #{container_id} container for not satify all requires.}")
           Business::DeleteContainer.new({container_id: container_id})
         end
         break
@@ -46,6 +49,10 @@ class ProduceSpecialContainersWorker
   def update_db_status(container_id)
     container = Container.where(container_id: container_id).first
     container.update_attributes(status: Container::STATUS_LIST['used']) if container
+  end
+
+  def logger_file_name
+    @logger_file_name = "workers/produce_special_containers/delete_container.log"
   end
 
 end
