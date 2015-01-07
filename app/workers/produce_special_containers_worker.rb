@@ -34,7 +34,7 @@ class ProduceSpecialContainersWorker
         message = "Can not provide #{params[:processor_size]} processors and #{params[:memory_size]}G memory for #{purpose}."
         produced_containers.try(:each) do |container_id|
           logger.info("Delete #{container_id} container for not satify all requires.}")
-          Business::DeleteContainer.new({container_id: container_id})
+          Business::DeleteContainer.new({container_id: container_id}).execute
         end
         break
       end
