@@ -24,9 +24,8 @@ module Business
 
     def execute
       hold_resource
-      return {"result" => false, "message" => "[warning] No available device."} unless available_device
-      @recommended_image = Image.recommended_image(purpose)
       return {"result" => false, "message" => "[warning] No recommended image."} unless recommended_image
+      return {"result" => false, "message" => "[warning] No available device."} unless available_device
       return {"result" => false, "message" => "[warning] No free ip."} unless free_ip_address
       begin
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
@@ -57,6 +56,8 @@ module Business
     end
 
     def hold_resource
+      @recommended_image = Image.recommended_image(purpose)
+      return false unless recommended_image
       @available_device = Device.available_device(purpose, options)
       return false unless available_device
       @free_ip_address = IpAddress.free_ip_address(available_device.id)
