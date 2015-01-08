@@ -3,7 +3,7 @@ class ProduceSpecialContainersWorker
   include Sidekiq::Lock::Worker
   include Utils::Logger
 
-  sidekiq_options lock: { timeout: 1000, name: 'lock-worker' }
+  sidekiq_options lock: { timeout: 3000, name: 'lock-worker' }
 
   def perform(purpose,uid,machines,return_url)
     self.logger_file = logger_file_name
