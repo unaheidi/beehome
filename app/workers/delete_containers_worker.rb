@@ -1,5 +1,6 @@
 class DeleteContainersWorker
   include Sidekiq::Worker
+  include Utils::Logger
 
   def perform(uid,machines,purpose,return_url)
     self.logger_file = logger_file_name
