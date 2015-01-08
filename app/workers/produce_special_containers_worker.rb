@@ -43,6 +43,7 @@ class ProduceSpecialContainersWorker
       message.push({"id" => machine["id"], "ip" => result["ip"]})
     end
 
+    sleep(1)
     DeliverWorker.perform_async({"uid"=> uid,"result" => last_result,"message" => message},return_url,[5, 10, 20 ,30]) if return_url
   end
 
