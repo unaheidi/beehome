@@ -12,7 +12,7 @@ class DeleteContainersWorker
                                   where(status: Container::STATUS_LIST['used']).first
       if to_be_deleted_container.nil?
         logger.error("The to be deleted container with machine['ip'] doesn't exist.}")
-        message.push({"id" => machine['id'], "state" => false)
+        message.push({"id" => machine['id'], "state" => false})
         next
       else
         result = Business::DeleteContainer.new(container_id: to_be_deleted_container.container_id).execute
