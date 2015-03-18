@@ -36,7 +36,7 @@ $(document).on 'ready page:load', ->
               method: 'delete',
               context: this,
               success: (data, status, xhr) ->
-                alert("delete success")
+                document.location.reload()
     false
   $('.remove-all-ips').click ->
     ip_start =  $("#start_ip").val()
@@ -58,7 +58,7 @@ $(document).on 'ready page:load', ->
 
     while i <= end
       ip_list.push startcheck  + i
-      ip_tags += "<span class = 'label label-warning'>" + startcheck + i +"</span><br>"
+      ip_tags += "<span class = 'label label-warning'>" + startcheck + i + "</span><br>"
       i++
     if ip_list.length
 
@@ -73,7 +73,7 @@ $(document).on 'ready page:load', ->
               method: 'delete',
               context: this,
               success: (data, status, xhr) ->
-                alert("delete success")
+                document.location.reload()
     false
   $('.remove-ips').click ->
     ips =  $("input[name=\"ip\"]:checked")
@@ -95,5 +95,6 @@ $(document).on 'ready page:load', ->
               method: 'delete',
               context: this,
               success: (data, status, xhr) ->
-                alert("delete success")
+                ips.each (i) ->
+                  $(this).hide()
     false

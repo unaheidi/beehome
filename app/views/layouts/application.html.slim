@@ -22,10 +22,10 @@ html
                i.fa
                 |docker机器
 
-            li class="#{nav.eql?('device') ? 'active' : nil}"
-              a href='#'
+            li class="#{nav.eql?('agent') ? 'active' : nil}"
+              a href='/agents'
                 i.fa
-                 |物理机管理
+                 |Agent管理
 
     .container
       - if flash.present?

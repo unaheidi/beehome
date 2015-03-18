@@ -17,6 +17,9 @@ Beehome::Application.routes.draw do
 
   mount API::API => '/api'
 
+  resources :agents do
+    delete :remove_ips, on: :collection
+  end
   resources :containers do
     delete :remove_ips, on: :collection
   end
