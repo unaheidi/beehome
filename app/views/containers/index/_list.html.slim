@@ -2,11 +2,22 @@
   .panel-heading
     i.fa.fa-list-alt
       ' docker详情
+    input.width-10.pull-right id='end_ip'
 
+    span.label.label-success.pull-right ~
+    input.width-10.pull-right id='start_ip'
+    =link_to '#',
+        class: 'remove-all-ips pull-right padding-right-10 red',
+        data: { remove_ip: "all" } do
+          i.fa.fa-trash-o 删除区间
     =link_to '#',
         class: 'remove-ips pull-right padding-right-10 red',
-        data: { remove_ip: "all" } do
-          i.fa.fa-trash-o &nbsp;
+        data: { remove_ip: "selected" } do
+          i.fa.fa-trash-o 删除所选
+    =link_to '#',
+        class: 'remove-page-ips pull-right padding-right-10 red',
+        data: { remove_ip: "page" } do
+          i.fa.fa-trash-o 删除本页
   .panel-body
     table.table.table-bordered.table-hover
       tr
