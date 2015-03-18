@@ -15,7 +15,7 @@ $(document).on 'ready page:load', ->
             method: 'delete',
             success: (data, status, xhr) ->
               bootbox.confirm "清除成功~", (result) ->
-                document.location.reload()
+                Turbolinks.visit(window.location)
     false
   $('.remove-page-ips').click ->
     ips =  $("input[name=\"ip\"]")
@@ -38,7 +38,7 @@ $(document).on 'ready page:load', ->
               context: this,
               success: (data, status, xhr) ->
                 bootbox.confirm "清除成功~", (result) ->
-                  document.location.reload()
+                  Turbolinks.visit(window.location)
     false
   $('.remove-all-ips').click ->
     ip_start =  $("#start_ip").val()
@@ -85,7 +85,7 @@ $(document).on 'ready page:load', ->
                   context: this,
                   success: (data, status, xhr) ->
                     bootbox.confirm "清除成功~", (result) ->
-                      document.location.reload()
+                      Turbolinks.visit(window.location)
     false
   $('.remove-ips').click ->
     ips =  $("input[name=\"ip\"]:checked")
@@ -108,5 +108,5 @@ $(document).on 'ready page:load', ->
               context: this,
               success: (data, status, xhr) ->
                 bootbox.confirm "清除成功~", (result) ->
-                  document.location.reload()
+                  Turbolinks.visit(window.location)
     false
