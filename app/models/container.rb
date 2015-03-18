@@ -13,7 +13,7 @@ class Container < ActiveRecord::Base
   def purpose
     self.image.purpose
   end
-
+  
   class << self
     def to_be_deleted_container(container_id)
       Container.where(container_id: container_id).first

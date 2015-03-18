@@ -1,0 +1,53 @@
+.panel.panel-info
+  .panel-heading
+    i.fa.fa-list-alt
+      ' docker详情
+
+    =link_to '#',
+        class: 'remove-ips pull-right padding-right-10 red',
+        data: { remove_ip: "all" } do
+          i.fa.fa-trash-o &nbsp;
+  .panel-body
+    table.table.table-bordered.table-hover
+      tr
+        th.width-5 #
+        th.hide container Id
+        th.width-15 ip
+        th.width-10 镜像类型
+        th.width-10 cpu 个数
+        th.width-10 cpu 模式
+        th.width-5 内存(GB)
+        th.width-5 状态
+        th 创建时间
+        th.width-10 操作
+      - containers.each do |container|
+        tr
+          td =container.id
+          td.hide =container.container_id
+          td
+            - if container.ip_address.present?
+              input.need-remove-ip type="checkbox" name='ip' value= "#{container.ip_address.address}"
+               =container.ip_address.address
+          td
+            span.label.label-success =container.purpose
+          td =container.processor_size
+          td
+           span.label.label-info  =container.processor_occupy_mode
+          td =container.memory_size
+          td
+            - if container.status == 0
+               span.label.label-success available
+            - elsif container.status == 1
+              span.label.label-warning used
+            - else
+              span.label.label-danger deleted
+          td =container.created_at
+          td
+            =link_to '#',
+                class: 'remove-ip  padding-right-10 red',
+                data: { remove_ip: "siginal" } do
+                  i.fa.fa-trash-o &nbsp;
+
+
+
+

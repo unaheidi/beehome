@@ -1,0 +1,136 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+body {
+  padding-top: 70px;
+  font-family: 'FontAwesome';
+  -webkit-font-smoothing: antialiased;
+}
+
+.special{
+  padding-top:14px;
+  padding-left:14px;
+}
+.panel-heading{
+ min-height: 42px;
+ max-height: 42px;
+ font-size: 15px;
+
+}
+.red{
+ color:#c7254e;
+}
+
+.blue{
+ color:#2f6f9f;
+}
+
+.yellow{
+ color:#f9a123;
+}
+
+.green{
+color:#1d9d74;
+}
+.width-5{
+width: 5%;
+}
+.width-10{
+  width:10%;
+}
+.width-20{
+  width:20%;
+}
+.width-25{
+  width:25%;
+}
+.width-30{
+  width:30%;
+}
+.width-35{
+  width:35%;
+}
+.width-40{
+  width:40%;
+}
+
+.width-100{ width: 100%; }
+
+.width_45{
+  width:45%;
+}
+
+.width_50{
+  width:50%;
+}
+.padding-right-10{
+  padding-right:10px;
+}
+.form-one-line {
+  margin-top:14px;
+  .form-group {
+    float: left;
+    width: 78%;
+
+    input { width: 100%; }
+  }
+
+  button {
+    width: 20%;
+    float: right;
+  }
+}
+
+.table-two-rows {
+  td {
+    width: 50%;
+  }
+}
+
+.table{
+  tbody{
+    tr{
+      td{
+        vertical-align: middle;
+      }
+
+    }
+  }
+}
+
+.fixed-height {
+  max-height: 550px;
+  overflow-y: scroll;
+}
+
+ul.grey {
+  li {
+    background-color: #eee;
+  }
+}
+
+.autocomplete-suggestions { border: 1px solid rgba(0, 0, 0, 0.2); background: #FAFDFF; overflow: auto;box-shadow:3px 5px 7px rgba(79, 153, 198, 0.3); }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { border: 3px solid #fff;background: #4F99C6; }
+.autocomplete-suggestions strong { font-weight: normal; color: #bf534d; }
+.autocomplete-suggestions{
+  .autocomplete-selected{
+    strong { font-weight: normal; color: #fff; }
+    color:#fff;
+  }
+}
+.autocomplete-group { padding: 2px 5px; list-style:none;outline:none;}
+.autocomplete-group strong { display: block; border-bottom: 1px solid #fff; }

@@ -1,0 +1,12 @@
+- %w(success danger).each do |type|
+  - if flash[type].is_a?(Hash)
+    .alert.alert-dismissible role='alert' class="alert-#{type}"
+      button.close type="button" data-dismiss="alert" aria-label="Close"
+        span aria-hidden="true" &times;
+      - flash[type].each do |key, value|
+        - if value.present?
+          li =value.join(', ')
+  - elsif flash[type].is_a?(String)
+    .alert role='alert' class="alert-#{type}" =flash[type]
+
+

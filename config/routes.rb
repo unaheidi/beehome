@@ -17,6 +17,10 @@ Beehome::Application.routes.draw do
 
   mount API::API => '/api'
 
+  resources :containers do
+    delete :remove_ips, on: :collection
+  end
+  root to: 'containers#index'
 
   # Sample resource route with options:
   #   resources :products do
