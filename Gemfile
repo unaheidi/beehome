@@ -32,7 +32,7 @@ group :assets do
 end
 
 gem 'kaminari'
-
+gem 'turbolinks'
 gem 'jquery-rails'
 gem 'bootbox-rails', '~> 0.4.0'
 gem 'slim'

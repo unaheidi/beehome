@@ -13,9 +13,10 @@
 #= require jquery
 #= require jquery_ujs
 #= require twitter/bootstrap
+#= require turbolinks
 #= require bootbox
 #= require_tree .
-
+Turbolinks.enableProgressBar()
 window.refresh = ->
   document.location.reload()
 
