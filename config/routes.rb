@@ -20,6 +20,9 @@ Beehome::Application.routes.draw do
   resources :agents do
     delete :remove_ips, on: :collection
   end
+  resources :alpha do
+    get :rebuild, on: :collection
+  end
   resources :containers do
     delete :remove_ips, on: :collection
   end

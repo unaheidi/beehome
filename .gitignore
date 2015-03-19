@@ -13,6 +13,7 @@ backups/*
 .rbenv-version
 .directory
 config/database.yml
+config/settings/admin.yml
 .idea
 *.DS_Store
 .chef

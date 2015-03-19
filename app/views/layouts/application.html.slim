@@ -27,6 +27,10 @@ html
                 i.fa
                  |Agent管理
 
+            li class="#{nav.eql?('alpha') ? 'active' : nil}"
+              a href='/alpha'
+                i.fa
+                 |alpha管理
     .container
       - if flash.present?
         = render partial: 'layouts/flash'

@@ -13,4 +13,5 @@ class ContainersController < ApplicationController
     delete_container_worker.perform_web(params[:ips],"performance_test")
     head :ok
   end
+
 end

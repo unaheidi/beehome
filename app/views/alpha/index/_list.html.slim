@@ -1,0 +1,61 @@
+.panel.panel-info
+  .panel-heading
+    i.fa.fa-list-alt
+      ' Alpha虚拟机详情
+    input.width-10.pull-right id='end_ip'
+
+    span.label.label-success.pull-right ~
+    input.width-10.pull-right id='start_ip'
+    =link_to '#',
+        class: 'rebuild-all-ips pull-right padding-right-10 red',
+        data: { rebuild_ip: "all" } do
+          i.fa.fa-repeat 重建区间
+    =link_to '#',
+        class: 'rebuild-ips pull-right padding-right-10 red',
+        data: { rebuild_ip: "selected" } do
+          i.fa.fa-repeat 重建所选
+    =link_to '#',
+        class: 'rebuild-page-ips pull-right padding-right-10 red',
+        data: { rebuild_ip: "page" } do
+          i.fa.fa-repeat 重建本页
+  .panel-body
+    table.table.table-bordered.table-hover
+      tr
+        th.width-5 #
+        th.hide container Id
+        th.width-15 ip
+        th.width-10 镜像类型
+        th.width-5 状态
+        th 创建/更新时间
+        th.width-10 操作
+      - containers.each do |container|
+        tr
+
+          td =container.id
+          td.hide =container.container_id
+          td
+            - if container.ip_address.present?
+              label
+                input.need-rebuild-ip type="checkbox" name='ip' value= "#{container.ip_address.address}"
+                ' 
+                span.label.label-primary
+                  =container.ip_address.address
+          td
+            span.label.label-success =container.purpose
+          td
+            - if container.status == 0
+               span.label.label-success available
+            - elsif container.status == 1
+              span.label.label-warning used
+            - else
+              span.label.label-danger deleted
+          td =container.updated_at
+          td
+            =link_to '#',
+                class: 'rebuild-ip  padding-right-10 red',
+                data: { rebuild_ip: "siginal" } do
+                  i.fa.fa-repeat &nbsp;
+
+
+
+

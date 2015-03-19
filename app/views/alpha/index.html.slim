@@ -1,0 +1,7 @@
+.row
+  .col-xs-12
+    .clearfix
+      .pull-right
+        = paginate @containers
+  .col-xs-12
+    = render partial: 'alpha/index/list', locals:{containers: @containers}

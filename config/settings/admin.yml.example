@@ -1,0 +1,10 @@
+default: &default
+  admin:
+    user_name: BeehomeAdmin
+    passwd: @BeeHome2015
+development:
+  <<: *default
+test:
+  <<: *default
+production:
+  <<: *default
