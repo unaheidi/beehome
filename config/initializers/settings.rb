@@ -4,6 +4,8 @@ class Settings < Settingslogic
   namespace Rails.env
 
   Dir["#{Rails.root}/config/settings/*.yml"].each do |file|
-    Settings.merge!(Settings.new(file)) unless file == "#{Rails.root}/config/settings/base.yml"
+    Settings.merge!(Settings.new(file)) unless file.eql?("#{Rails.root}/config/settings/base.yml")
   end
+
+  load!
 end

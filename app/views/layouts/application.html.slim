@@ -15,23 +15,32 @@ html
           a.navbar-brand.index href='/'
             i.fa
              |BeeHome
-        .collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li class="#{nav.eql?('container') ? 'active' : nil}"
-              a href='/containers'
-               i.fa
-                |docker机器
+        - if login?
+          .collapse.navbar-collapse
+            ul.nav.navbar-nav
+              li class="#{nav.eql?('container') ? 'active' : nil}"
+                a href='/containers'
+                 i.fa
+                  |docker机器
 
-            li class="#{nav.eql?('agent') ? 'active' : nil}"
-              a href='/agents'
-                i.fa
-                 |Agent管理
+              li class="#{nav.eql?('agent') ? 'active' : nil}"
+                a href='/agents'
+                  i.fa
+                   |Agent管理
 
-            li class="#{nav.eql?('alpha') ? 'active' : nil}"
-              a href='/alpha'
-                i.fa
-                 |alpha管理
+              li class="#{nav.eql?('alpha') ? 'active' : nil}"
+                a href='/alpha'
+                  i.fa
+                   |alpha管理
+              
+            ul.nav.navbar-nav.pull-right
+                li
+                  .btn-group
+                    button.btn.btn-danger.dropdown-toggle style="margin-top: 10px" data-toggle="dropdown" = current_user
+                    ul.dropdown-menu
+                      li
+                         a href='/logout' logout
+
     .container
-      - if flash.present?
-        = render partial: 'layouts/flash'
+      = render partial: 'layouts/flash', locals: { flash: flash }
       == yield

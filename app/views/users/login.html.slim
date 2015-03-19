@@ -1,0 +1,22 @@
+.col-sm-6.col-sm-offset-3
+  = form_tag '/login', class: 'form-horizontal' do
+    h3.red style="text-align: center;" 登录
+
+    hr
+
+
+    .form-group
+      .col-sm-12
+        .input-group
+          .input-group-addon
+            i.fa.fa-user
+          = text_field_tag :username, nil, class: 'form-control'
+    .form-group
+      .col-sm-12
+        .input-group
+          .input-group-addon
+            i.fa.fa-lock
+          = password_field_tag :password, nil, class: 'form-control'
+    .form-group
+      .col-sm-12
+          = submit_tag 'Login', class: 'btn btn-primary fa fa-key form-control'

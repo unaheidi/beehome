@@ -26,6 +26,8 @@ Beehome::Application.routes.draw do
   resources :containers do
     delete :remove_ips, on: :collection
   end
+  match '/login' => 'users#login'
+  match '/logout' => 'users#logout'
   root to: 'containers#index'
 
   # Sample resource route with options:

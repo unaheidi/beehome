@@ -1,5 +1,7 @@
 class AlphaController < ApplicationController
   before_filter {self.nav = 'alpha'}
+  before_filter :authorize_user
+
   def index
     @containers = Container.
       order('updated_at desc').

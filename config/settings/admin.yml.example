@@ -1,7 +1,7 @@
 default: &default
   admin:
-    user_name: BeehomeAdmin
-    passwd: @BeeHome2015
+    username: username
+    password: username
 development:
   <<: *default
 test:
