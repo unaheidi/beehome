@@ -1,4 +1,4 @@
-- %i(success danger).each do |type|
+- ["success", "danger"].each do |type|
   - if flash[type].is_a?(Hash)
     .alert.alert-dismissible role='alert' class="alert-#{type}"
       button.close type="button" data-dismiss="alert" aria-label="Close"
