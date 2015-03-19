@@ -1,5 +1,6 @@
 class ContainersController < ApplicationController
   before_filter {self.nav = 'container'}
+  before_filter :authorize_user
   def index
     @containers = Container.
       includes(:ip_address, :image).

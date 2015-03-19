@@ -32,15 +32,15 @@ html
                 a href='/alpha'
                   i.fa
                    |alpha管理
-              
+
             ul.nav.navbar-nav.pull-right
                 li
-                  .btn-group
-                    button.btn.btn-danger.dropdown-toggle style="margin-top: 10px" data-toggle="dropdown" = current_user
-                    ul.dropdown-menu
-                      li
-                         a href='/logout' logout
-
+                  a.dropdown-toggle.user-info data-toggle="dropdown" aria-expanded="false" id="user_menu"
+                    i.fa.fa-user style="font-size:18px;" &nbsp;
+                    small =current_user
+                  ul.dropdown-menu role="menu" aria-labelledby="user_menu"
+                    li
+                      a href='/logout' logout
     .container
       = render partial: 'layouts/flash', locals: { flash: flash }
       == yield

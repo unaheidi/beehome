@@ -44,10 +44,10 @@ ActiveRecord::Schema.define(:version => 20141127074729) do
     t.string   "tag"
     t.string   "image_id"
     t.string   "dockerfile_url"
+    t.string   "purpose"
     t.integer  "status"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
-    t.string   "purpose"
   end
 
   create_table "ip_addresses", :force => true do |t|

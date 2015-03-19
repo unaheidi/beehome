@@ -30,6 +30,28 @@ body {
  font-size: 15px;
 
 }
+.login-container {
+  position: absolute;
+  top: 20%;
+  padding: 40px;
+  padding-top: 0px;
+  border: 7px solid #efefe8;
+  width: 450px;
+}
+
+.user-info {
+  max-width: 200px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  vertical-align: top;
+  line-height: 5px;
+  position: relative;
+  top: 0px;
+}
+
 .red{
  color:#c7254e;
 }
