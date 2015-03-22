@@ -49,6 +49,7 @@ module API
       end
 
       post "delete_containers" do
+
         uid = params['uid']
         purpose = params['purpose']
         return_url = params['return_url']
