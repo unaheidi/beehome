@@ -1,4 +1,5 @@
 require 'api/api'
+require 'sidekiq/web'
 
 Beehome::Application.routes.draw do
   # The priority is based upon order of creation:
@@ -18,6 +19,7 @@ Beehome::Application.routes.draw do
   mount API::API => '/api'
 
   resources :agents do
+    get :rebuild, on: :collection
     delete :remove_ips, on: :collection
   end
   resources :alpha do
@@ -28,6 +30,7 @@ Beehome::Application.routes.draw do
   end
   match '/login' => 'users#login'
   match '/logout' => 'users#logout'
+  mount Sidekiq::Web => '/sidekiq'
   root to: 'containers#index'
 
   # Sample resource route with options:

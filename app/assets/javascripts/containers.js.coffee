@@ -1,4 +1,22 @@
 $(document).on 'ready page:load', ->
+  $('.rebuild-agent').click ->
+    ip =  $(this).parents('tr').find('.need-remove-ip').val();
+    ips = new Array
+    ips.push ip
+    that = $(this)
+    bootbox.confirm
+      title: "<i class='fa fa-info blue'> 提示</i>"
+      message: '<div class="red" >你确定要重建<span class= "label label-warning">' + ips + '</span>的container ?</div>'
+      callback: (result) ->
+        if result
+          $.ajax '/agents/rebuild',
+            data:
+              ips: ips,
+            method: 'get',
+            success: (data, status, xhr) ->
+              bootbox.confirm "重建成功~", (result) ->
+                Turbolinks.visit(window.location)
+    false
   $('.remove-ip').click ->
     ip =  $(this).parents('tr').find('.need-remove-ip').val();
     ips = new Array

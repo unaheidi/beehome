@@ -59,6 +59,8 @@ gem "httparty"
 # Background jobs
 gem 'sidekiq', '~> 2.16'
 gem 'sidekiq_status', '~> 1.0.7'
+gem 'sinatra', :require => nil
+gem 'redis', '~> 3.2.1'
 gem 'capistrano-sidekiq'
 
 # Deploy

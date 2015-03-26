@@ -21,18 +21,21 @@ html
               li class="#{nav.eql?('container') ? 'active' : nil}"
                 a href='/containers'
                  i.fa
-                  |docker机器
+                  |性能虚机管理
 
               li class="#{nav.eql?('agent') ? 'active' : nil}"
                 a href='/agents'
                   i.fa
-                   |Agent管理
+                   |性能代理管理
 
               li class="#{nav.eql?('alpha') ? 'active' : nil}"
                 a href='/alpha'
                   i.fa
-                   |alpha管理
+                   |alpha虚机管理
 
+              li
+                a href='/sidekiq' target='_blank'
+                   ' 异步任务管理
             ul.nav.navbar-nav.pull-right
                 li
                   a.dropdown-toggle.user-info data-toggle="dropdown" aria-expanded="false" id="user_menu"
