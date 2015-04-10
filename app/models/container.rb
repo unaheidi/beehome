@@ -13,10 +13,19 @@ class Container < ActiveRecord::Base
   def purpose
     self.image.purpose
   end
-  
+
   class << self
     def to_be_deleted_container(container_id)
       Container.where(container_id: container_id).first
+    end
+
+    def clean_with_specified_ip(ip)
+      return false if ip.blank?
+      containers = Container.where(ip_address_id: IpAddress.where(address: ip).first.id)
+      containers.each do |container|
+        container.update_attributes(status: Container::STATUS_LIST['deleted'])
+      end
+      return true
     end
   end
 end
