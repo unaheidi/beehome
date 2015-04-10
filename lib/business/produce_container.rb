@@ -1,14 +1,16 @@
 module Business
   class ProduceContainer
     attr_reader :purpose, :options, :available_device, :recommended_image,
-                :free_ip_address, :cpu_set, :new_container
+                :free_ip_address, :cpu_set, :new_container, :specified_ip
 
     include Utils::Logger
     include Utils::Time
 
-    def initialize(purpose,options = {processor_size: 0, processor_occupy_mode: 'share', memory_size: 2})
+    def initialize(purpose, options = {processor_size: 0, processor_occupy_mode: 'share', memory_size: 2}, specified_ip = nil)
       @purpose = purpose
+      @specified_ip = specified_ip
       @options = options
+
       if purpose == 'jagent'
         options[:processor_occupy_mode] = 'private'
         options[:processor_size] = 2
@@ -23,8 +25,15 @@ module Business
     end
 
     def execute
-      hold_resource
-      return {"result" => false, "message" => "[warning] No recommended image."} unless recommended_image
+      pre_check_result = hold_resource
+      if !pre_check_result && !recommended_image
+        return {"result" => false, "message" => "[warning] No recommended image."}
+      end
+
+      if !pre_check_result && !@specified_ip.blank?
+        return {"result" => false, "message" => "[warning] The specified ip can not be used to produce new container."}
+      end
+
       return {"result" => false, "message" => "[warning] No available device."} unless available_device
       return {"result" => false, "message" => "[warning] No free ip."} unless free_ip_address
       begin
@@ -58,10 +67,23 @@ module Business
     def hold_resource
       @recommended_image = Image.recommended_image(purpose)
       return false unless recommended_image
-      @available_device = Device.available_device(purpose, options)
-      return false unless available_device
-      @free_ip_address = IpAddress.free_ip_address(available_device.id)
-      return false unless free_ip_address
+
+      if !@specified_ip.blank? && !specified_ip_available?
+        return false
+      end
+
+      if !@specified_ip.blank? && specified_ip_available?
+        @available_device = IpAddress.where(address: @specified_ip).first.device
+        @free_ip_address = IpAddress.where(address: @specified_ip).first
+      end
+
+      if @specified_ip.blank?
+        @available_device = Device.available_device(purpose, options)
+        return false unless available_device
+        @free_ip_address = IpAddress.free_ip_address(available_device.id)
+        return false unless free_ip_address
+      end
+
       update_db_status("hold")
       get_cpu_set
       create_container_record
@@ -137,6 +159,29 @@ module Business
         @cpu_set = available_device.share_free_processor_set_string(options[:processor_size])
         return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
       end
+    end
+
+    def specified_ip_available?
+      specified_ip_address = IpAddress.where(address: @specified_ip).first
+
+      if specified_ip_address.nil?
+        return false
+      end
+
+      if specified_ip_address.device.nil? || specified_ip_address.device.docker_remote_api.nil?
+        return false
+      end
+
+      options = {docker_remote_api: specified_ip_address.device.docker_remote_api}
+
+      if Service::Docker::Request.new(options).container_with_some_ip_exist?( @specified_ip )
+        return false
+      else
+        Container.clean_with_specified_ip(@specified_ip)
+        return true
+      end
+
+      false
     end
 
     def logger_file_name

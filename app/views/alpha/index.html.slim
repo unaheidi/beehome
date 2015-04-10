@@ -4,4 +4,5 @@
       .pull-right
         = paginate @containers
   .col-xs-12
+    = render partial: 'alpha/index/new', locals:{containers: @containers}
     = render partial: 'alpha/index/list', locals:{containers: @containers}

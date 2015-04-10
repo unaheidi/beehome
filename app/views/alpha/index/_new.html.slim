@@ -1,0 +1,13 @@
+.panel.panel-danger
+  .panel-heading
+    i.fa.fa-list-alt
+      ' 新建Alpha 虚机
+
+  .panel-body
+    label.col-sm-offset-5 IP
+    ' 
+    input id='ip'
+    =link_to '#',
+        class: 'new-ip  padding-right-10 red',
+        data: { ip: "all" } do
+          span.btn.btn-danger.btn-xs 新建alpha机器

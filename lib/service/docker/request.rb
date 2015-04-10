@@ -3,6 +3,7 @@ module Service::Docker
   class DockerCreateContainerError < StandardError; end
   class DockerStartContainerError < StandardError; end
   class DockerDeleteContainerError < StandardError; end
+  class DockerJudgeContainerError < StandardError; end
 
   class Request
     attr_reader :conn
@@ -66,6 +67,16 @@ module Service::Docker
         @conn.delete("/containers/#{container}", params).response.code
       rescue DockerDeleteContainerError => ex
         raise DockerDeleteContainerError.new(ex)
+      end
+    end
+
+    def container_with_some_ip_exist?(ip)
+      return "Ip can not be blank !" if ip.blank?
+
+      begin
+        @conn.get("/containers/json").body.include?(ip)
+      rescue DockerJudgeContainerError => ex
+        raise DockerJudgeContainerError.new(ex)
       end
     end
 

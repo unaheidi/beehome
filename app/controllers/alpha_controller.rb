@@ -10,6 +10,21 @@ class AlphaController < ApplicationController
       page(params[:page])
   end
 
+  def new_ip
+    ip = params[:ip]
+
+    response = Business::ProduceContainer.new('alpha',{}, ip).execute
+
+    if response.present? && response['result'] == true
+      flash[:success] = '创建alpha 虚机成功'
+      head :ok
+    else
+      flash[:danger] = "创建alpha 虚机失败 ERROR:#{response['message']}"
+      head :bad_request
+    end
+
+  end
+
   def rebuild
     params[:ips].each do |ip|
       ip_address = IpAddress.where(address: ip).first
