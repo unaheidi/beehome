@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AlphaController < ApplicationController
   before_filter {self.nav = 'alpha'}
   before_filter :authorize_user
