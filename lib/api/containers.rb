@@ -68,7 +68,29 @@ module API
         return {result: 2, message: "Beehome is going to delete the containers !"}
       end
 
+    get "docker_info" do
+      ip = params['ip']
+      ip_address = IpAddress.find_by_address(ip)
+
+      docker = Container.where(ip_address_id: ip_address.id, status: [0, 1])
+
+      device = Device.find(ip_address.device_id)
+      if device && device.ip
+        device_ip = device.ip
+      else
+        device_ip =nil
+      end
+
+      if docker && docker.first
+        instance_id = docker.first.container_id
+      else
+        instance_id = nil
+      end
+      return { ip: ip, device_ip: device_ip, instance_id: instance_id}
     end
+
+    end
+
   end
 end
 
