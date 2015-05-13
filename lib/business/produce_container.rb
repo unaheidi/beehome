@@ -117,6 +117,7 @@ module Business
         memory_size: options[:memory_size],
         status: Container::STATUS_LIST['available'],
       }
+      Rails.logger.info("create container: #{container}")
       @new_container = Container.create(container)
     end
 
