@@ -147,21 +147,6 @@ module Business
         return { ip: ip, image: image, memory_size:  memory_size}
       end
 
-      if purpose == 'jagent'
-        @cpu_set = available_device.free_processor_set.slice(0,2).join(',')
-        return { ip: ip, image: image, memory_size: memory_size, cpu_set: cpu_set }
-      end
-
-      if purpose == 'performance_test' && options[:processor_occupy_mode] == "private"
-        @cpu_set = available_device.free_processor_set.slice(0,options[:processor_size]).join(',')
-        Rails.logger.info(" available device: #{available_device} free processor_set :#{available_device.free_processor_set} ; cpu_set: #{@cpu_set}")
-        return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
-      end
-
-      if purpose == 'performance_test' && options[:processor_occupy_mode] == "share"
-        @cpu_set = available_device.share_free_processor_set_string(options[:processor_size])
-        return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
-      end
     end
 
     def specified_ip_available?
