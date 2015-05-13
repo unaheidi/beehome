@@ -39,7 +39,6 @@ module Business
       begin
         request = Service::Docker::Request.new(docker_remote_api: available_device.docker_remote_api)
         request.create_image(fromImage: recommended_image.repository, tag:recommended_image.tag)
-        Rails.logger.info("produce execute params: #{container_params}")
         result = request.create_container(purpose, container_params)
         @container_id = result.to_hash["Id"]
         start_status = request.start_container(container: @container_id) if @container_id
@@ -146,7 +145,7 @@ module Business
       if purpose == 'alpha'
         return { ip: ip, image: image, memory_size:  memory_size}
       end
-
+      Rails.logger.info("container_params : #{ip}; #{image}; #{memory_size}, cpu_set: #{@cpu_set}")
     end
 
     def specified_ip_available?
