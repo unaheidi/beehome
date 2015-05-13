@@ -154,6 +154,7 @@ module Business
 
       if purpose == 'performance_test' && options[:processor_occupy_mode] == "private"
         @cpu_set = available_device.free_processor_set.slice(0,options[:processor_size]).join(',')
+        Rails.logger.info("free processor_set :#{available_device.free_processor_set} ; cpu_set: #{@cpu_set}")
         return { ip: ip, image: image, memory_size: memory_size, cpu_set:  cpu_set }
       end
 
