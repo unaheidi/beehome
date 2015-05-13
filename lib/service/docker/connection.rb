@@ -17,6 +17,7 @@ module Service::Docker
             'Content-Type' => 'application/json'
           }
           params = (style == "form") ? {:body => options, headers: headers} : {:query => options, headers: headers}
+          Rails.logger.info("connect: param:#{params}")
           self.class.post(path, params)
         end
       rescue => ex
