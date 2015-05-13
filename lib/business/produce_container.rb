@@ -146,6 +146,7 @@ module Business
         return { ip: ip, image: image, memory_size:  memory_size}
       end
       Rails.logger.info("container_params : #{ip}; #{image}; #{memory_size}, cpu_set: #{@cpu_set}")
+      return { ip: ip, image: image, memory_size: memory_size, cpu_set:  @cpu_set }
     end
 
     def specified_ip_available?
