@@ -7,23 +7,26 @@ FactoryGirl.define do
 
     factory :alpha_v1_0 do
       tag "v1.0"
-      image_id "93c447941695"
+      image_id "93c447941696"
       purpose "alpha"
-      status 0
     end
 
     factory :alpha_v1_1 do
       tag "v1.1"
       image_id "77c447941689"
       purpose "alpha"
-      status 1
     end
 
     factory :alpha_v1_2 do
       tag "v1.2"
       image_id "45002345679c"
       purpose "alpha"
-      status 2
+    end
+
+    factory :performance_v1_3 do
+      tag "v1.3"
+      image_id "6700234ytref"
+      purpose "performance_test"
     end
 
   end

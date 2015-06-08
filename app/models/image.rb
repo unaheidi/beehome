@@ -17,14 +17,14 @@ class Image < ActiveRecord::Base
 
   def validate_one_recommended_for_a_purpose
     if status == Image::STATUS_LIST['recommended'] && self.class.exists?(purpose: purpose, status: Image::STATUS_LIST['recommended'])
-      errors.add(:base, "There is a recommended image for #{} purpose.")
+      errors.add(:base, "There is a recommended image for #{purpose}.")
     end
   end
 
   def validate_image_id_correct
     image = self.class.where(repository: repository, tag: tag).first
     if !image.blank? && image.image_id != image_id
-      errors.add(:base, "The same repositorie with same tag should have the same image_id.")
+      errors.add(:base, "The same repositories with same tag should have the same image_id.")
     end
   end
 
