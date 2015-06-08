@@ -1,5 +1,5 @@
 module Business
-	class DeleteContainer
+	class DeleteOneContainer
     attr_reader :options, :to_be_deleted_container
 
     include Utils::Logger

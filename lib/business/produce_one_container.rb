@@ -1,5 +1,5 @@
 module Business
-  class ProduceContainer
+  class ProduceOneContainer
     attr_reader :purpose, :options, :available_device, :recommended_image,
                 :free_ip_address, :cpu_set, :new_container, :specified_ip
 

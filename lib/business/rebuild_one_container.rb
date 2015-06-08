@@ -1,5 +1,5 @@
 module Business
-	class RebuildContainer
+	class RebuildOneContainer
     attr_reader :options, :recommended_image, :to_be_deleted_container
 
     include Utils::Logger

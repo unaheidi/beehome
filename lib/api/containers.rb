@@ -29,7 +29,7 @@ module API
         return {result: 0, message: "Failed.No such ip record in ip_addresses table."} if ip_address.blank?
         to_be_deleted_container = Container.where(ip_address_id: ip_address.id).where(status: Container::STATUS_LIST['used']).first
         return {result: 0, message: "Failed.No container with the specified ip in containers table."} if to_be_deleted_container.blank?
-        RebuildContainerWorker.perform_async(to_be_deleted_container.container_id,return_url)
+        RebuildOneContainerWorker.perform_async(to_be_deleted_container.container_id,return_url)
         return {result: 1, message: "Beehome is going to rebuild the container with ip #{container_ip} !"}
       end
 
@@ -44,7 +44,7 @@ module API
         return {result: 0, message: "No machiens error!"} if machines.nil?
         return {result: 0, message: "No uid error!"} if uid.nil?
 
-        ProduceSpecialContainersWorker.perform_async(purpose,uid,machines,return_url)
+        ProduceContainersWorker.perform_async(purpose,uid,machines,return_url)
         return {result: 1, message: "Beehome is going to provide the containers !"}
       end
 

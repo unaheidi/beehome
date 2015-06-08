@@ -16,7 +16,7 @@ class DeleteContainersWorker
         message.push({"id" => machine['id'], "state" => false})
         next
       else
-        result = Business::DeleteContainer.new(container_id: to_be_deleted_container.container_id).execute
+        result = Business::DeleteOneContainer.new(container_id: to_be_deleted_container.container_id).execute
         last_result = false if result["result"] == false
         message.push({"id" => machine['id'], "state" => result["result"]})
       end
@@ -39,7 +39,7 @@ class DeleteContainersWorker
         message.push({"id" => machine['id'], "state" => false})
         next
       else
-        result = Business::DeleteContainer.new(container_id: to_be_deleted_container.container_id).execute
+        result = Business::DeleteOneContainer.new(container_id: to_be_deleted_container.container_id).execute
         last_result = false if result["result"] == false
         message.push({"id" => machine['id'], "state" => result["result"]})
       end

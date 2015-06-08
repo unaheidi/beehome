@@ -14,14 +14,14 @@ class AgentsController < ApplicationController
       ip_address = IpAddress.where(address: ip).first
       to_be_deleted_container = Container.where(ip_address_id: ip_address.id).where(status: [0,1]).first
 
-      Business::RebuildContainer.new({container_id: to_be_deleted_container.container_id}).execute
+      Business::RebuildOneContainer.new({container_id: to_be_deleted_container.container_id}).execute
     end
     head :ok
   end
 
   def remove_ips
-    delete_container_worker = DeleteContainersWorker.new
-    delete_container_worker.perform_web(params[:ips],"jagent")
+    delete_containers_worker = DeleteContainersWorker.new
+    delete_containers_worker.perform_web(params[:ips],"jagent")
     head :ok
   end
 end

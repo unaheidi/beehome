@@ -14,7 +14,7 @@ class AlphaController < ApplicationController
   def new_ip
     ip = params[:ip]
 
-    response = Business::ProduceContainer.new('alpha',{}, ip).execute
+    response = Business::ProduceOneContainer.new('alpha',{}, ip).execute
 
     if response.present? && response['result'] == true
       flash[:success] = '创建alpha 虚机成功'
@@ -31,7 +31,7 @@ class AlphaController < ApplicationController
       ip_address = IpAddress.where(address: ip).first
       to_be_deleted_container = Container.where(ip_address_id: ip_address.id).where(status: [0,1]).first
 
-      Business::RebuildContainer.new({container_id: to_be_deleted_container.container_id}).execute
+      Business::RebuildOneContainer.new({container_id: to_be_deleted_container.container_id}).execute
     end
     head :ok
   end
