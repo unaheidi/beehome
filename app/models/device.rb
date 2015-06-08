@@ -28,8 +28,8 @@ class Device < ActiveRecord::Base
     return false if options[:memory_size] > free_memory
     return false if options[:processor_occupy_mode] == "private" &&
                     free_processor_set.size < options[:processor_size]
-    return false if options[:processor_occupy_mode] == "share" &&
-                    share_free_processor_set_string(options[:processor_size]).blank?
+    share_processor = share_free_processor_set_string(options[:processor_size])
+    return false if options[:processor_occupy_mode] == "share" && share_processor.blank?
     return true
   end
 
@@ -54,7 +54,8 @@ class Device < ActiveRecord::Base
               where(processor_size: processor_size).
               group(:cpu_set).count(:cpu_set).select{|k,v| v < processor_size }.first
     return result[0] if result
-    return free_processor_set.slice(0, processor_size).join(',')
+    return free_processor_set.slice(0, processor_size).join(',') if free_processor_set.size >= processor_size
+    return ""
   end
 
   class << self
