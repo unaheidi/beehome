@@ -1,0 +1,13 @@
+default: &default
+  gitlab:
+    destroy_machine: destroy_machine
+    post_url: /api/v3/op/performance_test_machine/machine_destroy
+development:
+  <<: *default
+test:
+  <<: *default
+production:
+  <<: *default
+  gitlab:
+    destroy_machine: destroy_machine
+    post_url: /api/v3/op/performance_test_machine/machine_destroy

@@ -1,0 +1,58 @@
+desc "Add a new device"
+task add_a_new_device: :environment do
+  device = {
+    ip: '192.168.79.13',
+    gateway: '192.168.79.1',
+    os: 'centos',
+    docker_remote_api: 'http://192.168.79.13:8090',
+    status: 2,
+    purpose: 'alpha'
+  }
+  puts Device.create(device).errors.full_messages
+end
+
+desc "Add a batch of ip addresses"
+task add_ip_addresses: :environment do
+  (121..170).to_a.each do |last_part|
+    ip = {
+      address: "192.168.79." + last_part.to_s,
+      netmask: 24,
+      device_id: 15,
+      status: 0
+    }
+    IpAddress.create(ip)
+  end
+end
+
+desc "Add a new image"
+task add_a_new_image: :environment do
+  image = {
+    repository: 'docker.diors.it/jmeter_agent',
+    tag: 'v0.9',
+    image_id: '888647c1d650 ',
+    purpose: 'jagent',
+    status: 2
+  }
+  puts Image.create(image).errors.full_messages
+end
+
+desc "Pull the specified image on a new device"
+task pull_the_image: :environment do
+  docker_remote_api = "http://0.0.0.0:8090"
+  request = Service::Docker::Request.new(docker_remote_api: docker_remote_api)
+  request.create_image(fromImage: "docker.diors.it/alpha_machine", tag: "v1.1")
+end
+
+desc "Produce a batch of alpha containers"
+task produce_alpha_containers: :environment do
+  50.times do
+    puts Business::ProduceOneContainer.new("alpha").execute
+  end
+end
+
+desc "Produce a batch of jagent containers"
+task produce_jagent_containers: :environment do
+  20.times do
+    puts Business::ProduceOneContainer.new("jagent").execute
+  end
+end
