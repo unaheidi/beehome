@@ -1,5 +1,6 @@
 .capistrano
 config/unicorn.rb
+config/deploy.rb
 *.out
 *.back
 *.bak
@@ -13,7 +14,8 @@ backups/*
 .rbenv-version
 .directory
 config/database.yml
-config/settings/admin.yml
+config/settings/*
+config/deploy/*
 .idea
 *.DS_Store
 .chef
