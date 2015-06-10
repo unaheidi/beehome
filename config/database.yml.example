@@ -1,0 +1,37 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+development:
+  adapter: mysql2
+  host: host
+  encoding: utf8
+  reconnect: false
+  database: beehome_development
+  pool: 10
+  username: username
+  password: "password"
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  host: host
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: beehome_test
+  pool: 5
+  username: username
+  password: "password"
+
+production:
+  adapter: mysql2
+  host: host
+  encoding: utf8
+  database: beehome
+  reconnect: false
+  pool: 50
+  username: username
+  password: "password"
